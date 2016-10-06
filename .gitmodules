@@ -1,0 +1,3 @@
+[submodule "lib/lovetoys"]
+	path = lib/lovetoys
+	url = https://github.com/lovetoys/lovetoys.git
