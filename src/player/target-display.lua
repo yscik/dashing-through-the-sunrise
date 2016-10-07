@@ -14,7 +14,7 @@ function TargetDisplay:draw()
   love.graphics.clear()
   if self.target.set then
     love.graphics.setColor(50,100,200)
-    love.graphics.circle("fill", 3, 3, 3)
+    love.graphics.circle("fill", 8, 8, 3)
   end
 
 end

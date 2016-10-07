@@ -8,11 +8,15 @@ function CanvasSystem:draw()
     
     if entity.draw then         
       love.graphics.setCanvas(canvas)
-
-      entity:draw()
+      love.graphics.clear()
       
+      entity:draw()
       love.graphics.setCanvas()
+      
+      camera:attach()
       love.graphics.draw(canvas, pos.x, pos.y)
+      camera:detach()
+    
     end
     
   end

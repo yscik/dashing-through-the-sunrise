@@ -3,7 +3,7 @@ Player = class("Player", Entity)
 
 function Player:initialize()
   Entity.initialize(self)
-  self:add(Position())
+  self:add(Position({x=300, y=200, r = 0}))
   self:add(Velocity())
   self:add(Canvas())
   self.burn = Burn({cost = Resource.Power, target = Target({source = Cursor, button = 'r'})})

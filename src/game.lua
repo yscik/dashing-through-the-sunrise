@@ -1,7 +1,8 @@
 lovetoys = require("lib/lovetoys/lovetoys")
 lovetoys.initialize({globals = true, debug = true})
 
-vector = require 'lib/vector-light'
+vector = require 'lib/hump/vector-light'
+Camera = require 'lib/hump/camera'
 extend = require 'src/utils/extend'
 
 require 'src/cursor/cursor-component'
@@ -29,6 +30,7 @@ function love.load(arg)
     
     if arg[#arg] == "-debug" then require("mobdebug").start() end
     
+    
     engine = Engine()
     engine:addSystem(MovementSystem())
     engine:addSystem(CursorSystem())
@@ -37,6 +39,8 @@ function love.load(arg)
     engine:addSystem(CanvasSystem(), "draw")
     
     player = Player()
+    camera = Camera(0,0)
+    camera.smoother = Camera.smooth.linear(1)
     target = TargetDisplay(player:get("Target"))
     cursor = CursorEntity()
     local a1 = Asteroid(400, 200)
@@ -55,6 +59,8 @@ end
 function love.update(dt)
   
   engine:update(dt)
+  local pos = player:get("Position").pos
+  camera:move((pos.x-camera.x)/2, (pos.y-camera.y)/2)
 
   if love.keyboard.isDown('escape') then
     love.event.quit()

@@ -1,3 +1,6 @@
 [submodule "lib/lovetoys"]
 	path = lib/lovetoys
 	url = https://github.com/lovetoys/lovetoys.git
+[submodule "lib/hump"]
+	path = lib/hump
+	url = https://github.com/vrld/hump.git
