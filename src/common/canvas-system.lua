@@ -4,7 +4,7 @@ CanvasSystem = class("CanvasSystem", System)
 function CanvasSystem:draw()
 
   for k, entity in pairs(self.targets) do
-    local canvas, pos = entity:get("Canvas").canvas, entity:get("Position")
+    local canvas, pos = entity:get("Canvas").canvas, entity:get("Position").pos
     
     if entity.draw then         
       love.graphics.setCanvas(canvas)

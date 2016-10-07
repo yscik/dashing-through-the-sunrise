@@ -2,19 +2,26 @@ lovetoys = require("lib/lovetoys/lovetoys")
 lovetoys.initialize({globals = true, debug = true})
 
 vector = require 'lib/vector-light'
+extend = require 'src/utils/extend'
 
 require 'src/cursor/cursor-component'
 require 'src/cursor/cursor-entity'
 require 'src/cursor/cursor-system'
 
+require 'src/player/target-system'
 require 'src/player/burn-system'
 require 'src/player/player'
+require 'src/player/target-display'
 
 require 'src/common/position-components'
 require 'src/common/movement-system'
 
 require 'src/common/canvas-component'
 require 'src/common/canvas-system'
+
+require 'src/resource/resource-types'
+require 'src/resource/resource-components'
+require 'src/resource/resource-system'
 
 require 'src/world/asteroid'
 
@@ -25,15 +32,18 @@ function love.load(arg)
     engine = Engine()
     engine:addSystem(MovementSystem())
     engine:addSystem(CursorSystem())
+    engine:addSystem(TargetSystem())
     engine:addSystem(BurnSystem())
     engine:addSystem(CanvasSystem(), "draw")
     
     player = Player()
+    target = TargetDisplay(player:get("Target"))
     cursor = CursorEntity()
     local a1 = Asteroid(400, 200)
     
-    engine:addEntity(player)
     engine:addEntity(a1)
+    engine:addEntity(target)
+    engine:addEntity(player)
     engine:addEntity(cursor)
     
 end

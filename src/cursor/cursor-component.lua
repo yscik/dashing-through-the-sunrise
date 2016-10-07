@@ -3,7 +3,7 @@ local CursorComponent = Component.create("Cursor")
 function CursorComponent:initialize()  
   self.x = 0;
   self.y = 0;
-  self.move = false;
+  self.button = {};
 end
 
 Cursor = CursorComponent()

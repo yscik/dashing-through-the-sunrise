@@ -9,11 +9,11 @@ function CursorSystem:initialize()
 end
 
 function CursorSystem:update(dt)
-  self.cursor.move = love.mouse.isDown(2)
+  self.cursor.button.l, self.cursor.button.m, self.cursor.button.r = love.mouse.isDown(1), love.mouse.isDown(3), love.mouse.isDown(2)
   self.cursor.x, self.cursor.y = love.mouse.getPosition()
   
   for k, entity in pairs(self.targets) do
-    local pos = entity:get("Position")
+    local pos = entity:get("Position").pos
     pos.x, pos.y = self.cursor.x, self.cursor.y
         
   end
