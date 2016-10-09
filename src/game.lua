@@ -4,6 +4,7 @@ lovetoys.initialize({globals = true, debug = true})
 vector = require 'lib/hump/vector-light'
 Camera = require 'lib/hump/camera'
 extend = require 'src/utils/extend'
+_ = require('lib/moses/moses')
 
 require 'src/cursor/cursor-component'
 require 'src/cursor/cursor-entity'

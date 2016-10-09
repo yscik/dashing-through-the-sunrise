@@ -4,3 +4,6 @@
 [submodule "lib/hump"]
 	path = lib/hump
 	url = https://github.com/vrld/hump.git
+[submodule "lib/moses"]
+	path = lib/moses
+	url = https://github.com/Yonaba/Moses.git
