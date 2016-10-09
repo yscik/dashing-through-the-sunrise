@@ -3,6 +3,7 @@ lovetoys.initialize({globals = true, debug = true})
 
 vector = require 'lib/hump/vector-light'
 Camera = require 'lib/hump/camera'
+Timer = require 'lib/hump/timer'
 extend = require 'src/utils/extend'
 _ = require('lib/moses/moses')
 
@@ -39,6 +40,11 @@ function love.load(arg)
     engine:addSystem(BurnSystem())
     engine:addSystem(CanvasSystem(), "draw")
     
+    logic = Engine()
+    Timer.every(1, function() logic:update(1) end)
+    
+    logic:addSystem(ResourceSystem())
+    
     player = Player()
     camera = Camera(0,0)
     camera.smoother = Camera.smooth.linear(1)
@@ -51,14 +57,20 @@ function love.load(arg)
     engine:addEntity(player)
     engine:addEntity(cursor)
     
+    logic:addEntity(player)
+    logic:addEntity(a1)
+    
 end
 
 function love.draw()
     engine:draw()
+     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+
 end
 
 function love.update(dt)
   
+  Timer.update(dt)
   engine:update(dt)
   local pos = player:get("Position").pos
   camera:move((pos.x-camera.x)/2, (pos.y-camera.y)/2)

@@ -17,8 +17,9 @@ function BurnSystem:update(dt)
             local dx,dy = vector.normalize(tx,ty)
             local l = vector.len(tx,ty)
             local current_speed = vector.len(v.x, v.y)
-            local max_speed = 200
-            local speed = math.min(current_speed+1, l, max_speed)
+            local max_speed = 280
+            local speed = math.min(current_speed+(140*dt), l, max_speed)
+            if burn.cost then burn.cost.active = speed > 10 end
             v.x, v.y = vector.mul(speed, dx,dy)
         end
     end
