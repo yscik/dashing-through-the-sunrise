@@ -5,7 +5,7 @@ function Asteroid:initialize(x, y)
   Entity.initialize(self)
   
   self:add(Position({x = x, y = y, r = 0}))
-  self:add(Canvas())
+  self:add(Canvas(350,400))
   
   self:add(Resources({
       Storage({type = 'Silicon', content = 1000})

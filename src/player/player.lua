@@ -6,7 +6,7 @@ function Player:initialize()
   
   self:add(Position({x=300, y=200, r = 0}))
   self:add(Velocity())
-  self:add(Canvas())
+  self:add(Canvas(40,40))
   
   self.burn = Burn({cost = Consume({type = Resource.Power, rate = 1}), target = Target({source = Cursor, button = 'r'})})
   self:add(self.burn)
@@ -26,7 +26,7 @@ function Player:draw()
 
   love.graphics.clear()
   love.graphics.setColor(150,100,200)
-  love.graphics.rectangle("fill", 0, 0, 30, 30)
   love.graphics.print("B"..self.battery.content, 0, 40)
+  love.graphics.rectangle("fill", 5, 5, 30, 30)
   
 end

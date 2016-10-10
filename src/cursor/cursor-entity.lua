@@ -4,13 +4,13 @@ function CursorEntity:initialize()
   Entity.initialize(self)
   self:add(Position())
   self:add(CursorPosition())
-  self:add(Canvas())
+  self:add(Canvas(20,20))
 
 end
 
 function CursorEntity:draw ()
   
   love.graphics.setColor(150,100,200)
-  love.graphics.circle("line", 8, 8, 6)
-
+  love.graphics.setLineWidth(2)
+  love.graphics.circle("line", 10, 10, 6)
 end
