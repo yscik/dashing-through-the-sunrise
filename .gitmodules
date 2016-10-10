@@ -7,3 +7,6 @@
 [submodule "lib/moses"]
 	path = lib/moses
 	url = https://github.com/Yonaba/Moses.git
+[submodule "lib/hc"]
+	path = lib/hc
+	url = https://github.com/vrld/HC.git
