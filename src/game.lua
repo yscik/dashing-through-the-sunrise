@@ -7,6 +7,8 @@ Timer = require 'lib/hump/timer'
 extend = require 'src/utils/extend'
 _ = require('lib/moses/moses')
 
+require 'src/utils/datacomponent'
+
 require 'src/cursor/cursor-component'
 require 'src/cursor/cursor-entity'
 require 'src/cursor/cursor-system'
