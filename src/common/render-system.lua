@@ -1,7 +1,7 @@
 
-CanvasSystem = class("CanvasSystem", System)
+RenderSystem = class("RenderSystem", System)
 
-function CanvasSystem:draw()
+function RenderSystem:draw()
 
   for k, entity in pairs(self.targets) do
     local canvasc, pos = entity:get("Canvas"), entity:get("Position").pos
@@ -24,6 +24,6 @@ function CanvasSystem:draw()
   end
 end
 
-function CanvasSystem:requires()
+function RenderSystem:requires()
     return {"Canvas", "Position"}
 end

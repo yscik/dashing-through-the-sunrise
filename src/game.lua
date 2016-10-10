@@ -25,7 +25,7 @@ require 'src/common/position-components'
 require 'src/common/movement-system'
 
 require 'src/common/canvas-component'
-require 'src/common/canvas-system'
+require 'src/common/render-system'
 
 require 'src/resource/resource-types'
 require 'src/resource/resource-components'
@@ -44,7 +44,7 @@ function love.load(arg)
     engine:addSystem(TargetSystem())
     engine:addSystem(HoverSystem())
     engine:addSystem(BurnSystem())
-    engine:addSystem(CanvasSystem(), "draw")
+    engine:addSystem(RenderSystem(), "draw")
     
     player = Player()
     camera = Camera(0,0)
