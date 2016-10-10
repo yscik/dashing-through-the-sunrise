@@ -9,12 +9,12 @@ _ = require('lib/moses/moses')
 
 require 'src/utils/datacomponent'
 
-require 'src/cursor/cursor-component'
-require 'src/cursor/cursor-entity'
-require 'src/cursor/cursor-system'
+require 'src/control/cursor-component'
+require 'src/control/cursor-entity'
+require 'src/control/cursor-system'
 
-require 'src/cursor/clickable-component'
-require 'src/cursor/hover-system'
+require 'src/control/clickable-component'
+require 'src/control/hover-system'
 
 require 'src/player/target-system'
 require 'src/player/burn-system'
