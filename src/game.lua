@@ -42,11 +42,6 @@ function love.load(arg)
     engine:addSystem(BurnSystem())
     engine:addSystem(CanvasSystem(), "draw")
     
-    logic = Engine()
-    Timer.every(1, function() logic:update(1) end)
-    
-    logic:addSystem(ResourceSystem())
-    
     player = Player()
     camera = Camera(0,0)
     camera.smoother = Camera.smooth.linear(1)
@@ -58,9 +53,6 @@ function love.load(arg)
     engine:addEntity(target)
     engine:addEntity(player)
     engine:addEntity(cursor)
-    
-    logic:addEntity(player)
-    logic:addEntity(a1)
     
 end
 
