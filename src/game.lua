@@ -13,6 +13,9 @@ require 'src/cursor/cursor-component'
 require 'src/cursor/cursor-entity'
 require 'src/cursor/cursor-system'
 
+require 'src/cursor/clickable-component'
+require 'src/cursor/hover-system'
+
 require 'src/player/target-system'
 require 'src/player/burn-system'
 require 'src/player/player'
@@ -39,6 +42,7 @@ function love.load(arg)
     engine:addSystem(MovementSystem())
     engine:addSystem(CursorSystem())
     engine:addSystem(TargetSystem())
+    engine:addSystem(HoverSystem())
     engine:addSystem(BurnSystem())
     engine:addSystem(CanvasSystem(), "draw")
     
