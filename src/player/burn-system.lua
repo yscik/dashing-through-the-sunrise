@@ -5,6 +5,10 @@ function Burn:initialize(settings)
   
 end
 
+function Burn:use(amount)
+  return self.source and self.source:use(amount)
+end
+
 
 BurnSystem = class("BurnSystem", System)
 
@@ -13,14 +17,19 @@ function BurnSystem:update(dt)
       
         local burn, pos, v = entity:get("Burn"), entity:get("Position").pos, entity:get("Velocity")
         if burn.target.set then
+          
             local tx,ty = burn.target.x - pos.x, burn.target.y - pos.y
             local dx,dy = vector.normalize(tx,ty)
             local l = vector.len(tx,ty)
             local current_speed = vector.len(v.x, v.y)
             local max_speed = 280
+            
             local speed = math.min(current_speed+(140*dt), l, max_speed)
-            if burn.cost then burn.cost.active = speed > 10 end
-            v.x, v.y = vector.mul(speed, dx,dy)
+            if burn:use(speed*0.01*dt) then 
+              v.x, v.y = vector.mul(speed, dx,dy)
+            end
+            
+            if vector.len(tx, ty) < 5 then burn.target.set = false end
         end
     end
     

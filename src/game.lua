@@ -58,7 +58,11 @@ end
 
 function love.draw()
     engine:draw()
-     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+    love.graphics.setColor(255,255,255)
+    love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+    
+    love.graphics.print("Player", 10, 30)
+    love.graphics.print("BAT: "..tostring(player.battery.content), 10, 50)
 
 end
 
