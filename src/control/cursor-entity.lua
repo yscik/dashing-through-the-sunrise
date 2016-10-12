@@ -1,9 +1,8 @@
 CursorEntity = class("CursorEntity", Entity)
 
-function CursorEntity:initialize()
+function CursorEntity:initialize(input)
   Entity.initialize(self)
-  self:add(Position())
-  self:add(CursorPosition())
+  self:add(Position(input.pos))
   self:add(Canvas(20,20))
 
 end

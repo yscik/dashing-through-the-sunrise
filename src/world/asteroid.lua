@@ -14,6 +14,8 @@ function Asteroid:initialize(x, y)
       Storage({type = 'Silicon', content = 1000})
   }))
 
+  self:add(Options({options = {{label = "Scan"}, {label = "Build powerplant"}}}))
+
 end
 
 function Asteroid:draw ()

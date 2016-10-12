@@ -9,12 +9,15 @@ _ = require('lib/moses/moses')
 
 require 'src/utils/datacomponent'
 
-require 'src/control/cursor-component'
+require 'src/control/input-state'
+require 'src/control/input-system'
+require 'src/control/command'
 require 'src/control/cursor-entity'
-require 'src/control/cursor-system'
-
 require 'src/control/clickable-component'
-require 'src/control/hover-system'
+
+require 'src/ui/panel'
+require 'src/ui/ui-components'
+require 'src/ui/ui-service'
 
 require 'src/player/target-system'
 require 'src/player/burn-system'
@@ -40,17 +43,20 @@ function love.load(arg)
     
     engine = Engine()
     engine:addSystem(MovementSystem())
-    engine:addSystem(CursorSystem())
+    
+    inputSytem = InputSystem()
+    
+    engine:addSystem(inputSytem)
     engine:addSystem(TargetSystem())
-    engine:addSystem(HoverSystem())
     engine:addSystem(BurnSystem())
     engine:addSystem(RenderSystem(), "draw")
     
-    player = Player()
+    player = Player(inputSytem.input)
     camera = Camera(0,0)
+    ui = Ui(camera)
     camera.smoother = Camera.smooth.linear(1)
     target = TargetDisplay(player:get("Target"))
-    cursor = CursorEntity()
+    cursor = CursorEntity(inputSytem.input)
     local a1 = Asteroid(400, 200)
     
     engine:addEntity(a1)
@@ -62,6 +68,8 @@ end
 
 function love.draw()
     engine:draw()
+    ui:draw()
+    
     love.graphics.setColor(255,255,255)
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
     

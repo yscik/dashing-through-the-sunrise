@@ -1,7 +1,7 @@
 
 Player = class("Player", Entity)
 
-function Player:initialize()
+function Player:initialize(cursor)
   Entity.initialize(self)
   
   self:add(Position({x=300, y=200, r = 0}))
@@ -12,7 +12,7 @@ function Player:initialize()
   
   self.burn = Burn({
       source = Consume({type = Resource.Power, rate = 1, sources = {self.battery}}), 
-      target = Target({source = Cursor, button = 'r'})
+      target = Target({source = cursor, button = 'r'})
     })
   
   self:add(self.burn)
@@ -27,3 +27,10 @@ function Player:draw()
   love.graphics.rectangle("fill", 5, 5, 30, 30)
   
 end
+
+
+function Player:burnto(target)
+  self.burn.target = target
+end
+
+
