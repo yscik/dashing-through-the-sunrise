@@ -6,11 +6,12 @@ function RenderSystem:draw()
   local function render_at(pos, dim, fn)
     local cx, cy = dim.width/2, dim.height/2
     love.graphics.push()
-    love.graphics.translate((pos.x or 0) - cx, (pos.y or 0) - cy)
+    love.graphics.translate((pos.x or 0), (pos.y or 0))
     love.graphics.rotate((pos.r or 0) % (2*math.pi))
     love.graphics.translate(-cx, -cy)
     fn()
     love.graphics.pop()
+    love.graphics.circle("fill", (pos.x or 0), (pos.y or 0), 2)
   end
 
   local function render(entity)
