@@ -5,7 +5,10 @@ vector = require 'lib/hump/vector-light'
 Camera = require 'lib/hump/camera'
 Timer = require 'lib/hump/timer'
 extend = require 'src/utils/extend'
-_ = require('lib/moses/moses')
+_ = require 'lib/moses/moses'
+
+suit = require 'lib/suit'
+
 
 require 'src/utils/datacomponent'
 
@@ -69,6 +72,7 @@ end
 function love.draw()
     engine:draw()
     ui:draw()
+    suit.draw()
     
     love.graphics.setColor(255,255,255)
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)

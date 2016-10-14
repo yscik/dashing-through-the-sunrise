@@ -11,13 +11,13 @@ end
 function Panel:draw(camera)
   
   function drawOption(k, option)
-    love.graphics.setColor(85, 114, 126)
-    love.graphics.rectangle("fill", 5, (k-1) * 50 + 5, 190, 40)
-    love.graphics.setColor(255,255,255)
-    love.graphics.print(option.label, 10, (k-1) * 50 + 10)
+    if suit.Button(option.label, suit.layout:row(180,30)).hit and option.action then
+      option.action:execute()
+    end
   end
 
-  local pos = { x = 20, y = 200 }
+  local pos = {x = 20, y = 200}
+  
   local height = #self.content * 50
   local ax,ay = camera:cameraCoords(self.anchor.x, self.anchor.y)
   
@@ -31,10 +31,10 @@ function Panel:draw(camera)
   love.graphics.line(pos.x + 100, pos.y + height/2, ax, ay)  
   love.graphics.circle("fill", ax, ay, 5)
   
-  love.graphics.push()
-  love.graphics.translate(pos.x, pos.y)
+  suit.layout:reset(pos.x+10, pos.y+10)
+  suit.layout:padding(10,10)
+
   _.each(self.content, drawOption)
-  love.graphics.pop()
   
 end
 
