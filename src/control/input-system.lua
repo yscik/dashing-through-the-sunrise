@@ -31,10 +31,6 @@ function InputSystem:keyup(x, y, button)
     if self.input.command:click() then self.input.command = nil end
   end
   
-  if button == 2 then 
-    self.input.move = {x = x, y = y}
-  end
-  
 end
 
 function InputSystem:listenMouse(options)
@@ -47,6 +43,9 @@ function InputSystem:update(dt)
   
   input.pos.x, input.pos.y = camera:mousePosition()
   input.click = love.mouse.isDown(1)
+  if love.mouse.isDown(2) then
+    self.input.move = {x = x, y = y }
+  end
   
   input.target = nil
   
