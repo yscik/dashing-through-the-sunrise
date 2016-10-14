@@ -27,6 +27,7 @@ function BurnSystem:update(dt)
             local speed = math.min(current_speed+(140*dt), l, max_speed)
             if burn:use(speed*0.01*dt) then 
               v.x, v.y = vector.mul(speed, dx,dy)
+              pos.r = pos.r + (vector.angleTo(dx,dy) - pos.r) * dt
             end
             
             if vector.len(tx, ty) < 5 then burn.target.set = false end

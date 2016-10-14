@@ -27,13 +27,6 @@ function Asteroid:draw ()
 
   love.graphics.setColor(200,200,200)
   love.graphics.polygon("fill", self.path)
-  
-  if self:get("Clickable").hover then
-    love.graphics.setColor(42,145,225)
-    love.graphics.setLineWidth(6)
-    love.graphics.line(self.path)
-  end
-
 
 end
 
