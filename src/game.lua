@@ -37,34 +37,44 @@ require 'src/resource/resource-types'
 require 'src/resource/resource-components'
 require 'src/resource/resource-system'
 
+require 'src/world/world'
 require 'src/world/asteroid'
+
+require 'src/build/buildcommand'
+require 'src/build/powerplant-entity'
 
 function love.load(arg)
     
     if arg[#arg] == "-debug" then require("mobdebug").start() end
-    
-    
+
     engine = Engine()
     engine:addSystem(MovementSystem())
+
+    inputSystem = InputSystem()
     
-    inputSytem = InputSystem()
-    
-    engine:addSystem(inputSytem)
+    engine:addSystem(inputSystem)
     engine:addSystem(TargetSystem())
     engine:addSystem(BurnSystem())
     engine:addSystem(RenderSystem(), "draw")
     
-    player = Player(inputSytem.input)
+    player = Player(inputSystem.input)
     camera = Camera(0,0)
-    ui = Ui(camera)
+    ui = Ui(camera, inputSystem)
     camera.smoother = Camera.smooth.linear(1)
-    target = TargetDisplay(player:get("Target"))
-    cursor = CursorEntity(inputSytem.input)
-    local a1 = Asteroid(400, 200)
-    
-    engine:addEntity(a1)
-    engine:addEntity(target)
+    local target = TargetDisplay(player:get("Target"))
+    local cursor = CursorEntity(inputSystem.input)
+
+    local a1 = Asteroid({x =600, y = 200, r = 0})
+    local a2 = Asteroid({x = -200, y = -200, r = -0.6 })
+
+    world = World(engine)
+
     engine:addEntity(player)
+    world.player = player
+    world:add(a1)
+    world:add(a2)
+
+    engine:addEntity(target)
     engine:addEntity(cursor)
     
 end
