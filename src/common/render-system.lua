@@ -24,7 +24,7 @@ end
 function RenderSystem.outline(entity)
   local clk, pos = entity:get("Hitbox"), entity:get("Position")
 
-  if clk.hover and clk.shape then
+  if clk and clk.hover and clk.shape then
     RenderSystem.atPosition(pos, function()
       love.graphics.setColor(42,145,225)
       love.graphics.setLineWidth(2)
@@ -40,12 +40,25 @@ function RenderSystem.outline(entity)
 end
 
 function RenderSystem:draw()
+
+  local function getZ(entity)
+    return entity:get('Position').z or 0
+  end
+
+  local function sortZ(a, b)
+    return getZ(a) < getZ(b)
+  end
+
+  _.sort(self.targets, sortZ)
+
   camera:attach()
-    for k, entity in pairs(self.targets.render) do RenderSystem.render(entity) end
-    for k, entity in pairs(self.targets.outline) do RenderSystem.outline(entity) end
+    for k, entity in pairs(self.targets) do
+      RenderSystem.render(entity)
+      RenderSystem.outline(entity)
+    end
   camera:detach()
 end
 
 function RenderSystem:requires()
-    return {render = {"Render", "Position"}, outline = {"Position", "Render", "Hitbox"}}
+    return {"Render", "Position"}
 end

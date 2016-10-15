@@ -8,7 +8,7 @@ function TargetDisplay:initialize(target)
   self.target = target
   _.extend(target, {w = 10, h = 10})
 
-  self:add(Position({reference = target, center = {size, size}}))
+  self:add(Position({reference = target, center = {size, size}, z = 7}))
   self:add(Render())
   
 end

@@ -5,7 +5,7 @@ function Player:initialize(cursor)
   Entity.initialize(self)
 
   local pos = {x=300, y=200}
-  self:add(Position({at = pos, center = {20, 20}}))
+  self:add(Position({at = pos, center = {20, 20}, z = 2}))
   self:add(Velocity())
   self:add(Render())
 

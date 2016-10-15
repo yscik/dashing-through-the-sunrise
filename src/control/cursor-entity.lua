@@ -4,7 +4,7 @@ local size = 10
 
 function CursorEntity:initialize(input)
   Entity.initialize(self)
-  self:add(Position({reference = input.pos}))
+  self:add(Position({reference = input.pos, z = 10}))
   self:add(Render())
 
 end
