@@ -1,7 +1,6 @@
-Panel = class("Panel", Entity)
+Panel = class("Panel")
 
 function Panel:initialize(anchor, content)
-  Entity.initialize(self)  
 --  self:add(UiPosition {anchor = anchor})
   self.anchor = anchor
   
@@ -13,6 +12,7 @@ function Panel:draw(camera)
   function drawOption(k, option)
     if suit.Button(option.label, suit.layout:row(180,30)).hit and option.action then
       option.action:execute()
+      ui:removePanel(self)
     end
   end
 
@@ -39,5 +39,5 @@ function Panel:draw(camera)
 end
 
 function Panel:click()
-  
+
 end

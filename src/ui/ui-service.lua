@@ -9,7 +9,12 @@ end
 
 function Ui:addPanel(anchor, content)
   
-  self.panels[#self.panels] = Panel(anchor, content)
+  self.panels[#self.panels+1] = Panel(anchor, content)
+end
+
+
+function Ui:removePanel(panel)
+  _.remove(self.panels, panel)
 end
 
 function Ui:draw()
