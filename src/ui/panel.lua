@@ -26,11 +26,11 @@ function Panel:draw(camera)
   
   love.graphics.setColor(56,56,56, 150)
   love.graphics.rectangle("fill", pos.x, pos.y, 200, height)
-  love.graphics.setLineWidth(3)
-  love.graphics.setColor(15,201,255,150)
+  love.graphics.setLineWidth(2)
+  love.graphics.setColor(60,60,60,130)
   love.graphics.line(pos.x + 100, pos.y + height/2, ax, ay)  
-  love.graphics.circle("fill", ax, ay, 5)
-  
+  love.graphics.circle("fill", ax, ay, 4)
+
   suit.layout:reset(pos.x+10, pos.y+10)
   suit.layout:padding(10,10)
 
