@@ -6,8 +6,7 @@ function Asteroid:initialize(pos)
   
   self.path = {10,300, 54,206, 150,170, 300,200, 330,250, 250,350, 200, 340, 70,380, 10,300};
 
-  self:add(Canvas(350, 400))
---  self:add(Velocity(0,0, 0.3))
+--  self:add(Velocity(0,0, 0))
   self:add(Hitbox({shape = self.path, command =
         PanelCommand { content = {
             {type = "Title", label = "Asteroid" },
@@ -18,7 +17,8 @@ function Asteroid:initialize(pos)
     }))
 
   self:add(Position({at = pos, center = self:get('Hitbox').center}))
-  
+  self:add(Render())
+
   self:add(Resources({
       Storage({type = 'Silicon', content = 1000})
   }))

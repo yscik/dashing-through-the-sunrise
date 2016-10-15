@@ -4,8 +4,8 @@ local size = 10
 
 function CursorEntity:initialize(input)
   Entity.initialize(self)
-  self:add(Position({reference = input.pos, center = {size,size}}))
-  self:add(Canvas(size*2))
+  self:add(Position({reference = input.pos}))
+  self:add(Render())
 
 end
 
@@ -13,5 +13,5 @@ function CursorEntity:draw ()
   
   love.graphics.setColor(150,100,200)
   love.graphics.setLineWidth(2)
-  love.graphics.circle("line", size, size, 6)
+  love.graphics.circle("line", 0, 0, 6)
 end

@@ -11,10 +11,11 @@ function Powerplant:initialize(asteroid, pos)
   Building.initialize(self)
 
   self.path = {10,100, 0,80, 5,55, 8,30, 1,0, 30,0, 28,50, 35,75, 30,100, 10,100};
+  self.renderPath = love.math.triangulate(self.path)
   self:add(Hitbox({shape = self.path, inactive = true}))
 
   self:add(Position({reference = pos, center = {20, 100}}))
-  self:add(Canvas(50, 120))
+  self:add(Render())
 
 --  local generator = Generate({type = Resource.Power, amount: 5, cost: Consume({type = Resource.Silicon, amount: 12})}
 --  self:add(generator)
@@ -33,7 +34,10 @@ function Building:draw ()
 
   local opacity = self.status / 100 * 255
   love.graphics.setColor(130,140,150, opacity)
-  love.graphics.polygon("fill", self.path)
+  _.each(self.renderPath, function(k, path)
+    love.graphics.polygon("fill", path)
+  end)
+
 
 end
 

@@ -29,7 +29,6 @@ require 'src/player/target-display'
 require 'src/common/position-components'
 require 'src/common/movement-system'
 
-require 'src/common/canvas-component'
 require 'src/common/render-system'
 
 require 'src/resource/resource-types'
@@ -47,7 +46,7 @@ game = {}
 function game.load(arg)
     
     if arg[#arg] == "-debug" then require("mobdebug").start() end
-
+    
     engine = Engine()
     engine:addSystem(MovementSystem())
 
@@ -65,7 +64,7 @@ function game.load(arg)
     local target = TargetDisplay(player:get("Target"))
     local cursor = CursorEntity(inputSystem.input)
 
-    local a1 = Asteroid({x =600, y = 200, r = 0})
+    a1 = Asteroid({x =600, y = 200, r = 0})
     local a2 = Asteroid({x = -200, y = -200, r = -0.6 })
 
     world = World(engine)
@@ -81,10 +80,11 @@ function game.load(arg)
 end
 
 function game.draw()
+
     engine:draw()
     ui:draw()
     suit.draw()
-    
+
     love.graphics.setColor(255,255,255)
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
     

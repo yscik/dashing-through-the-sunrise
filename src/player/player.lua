@@ -7,8 +7,8 @@ function Player:initialize(cursor)
   local pos = {x=300, y=200}
   self:add(Position({at = pos, center = {20, 20}}))
   self:add(Velocity())
-  self:add(Canvas(40))
-  
+  self:add(Render())
+
   self.battery = Storage({type = Resource.Power, capacity = 300, content = 200})
   
   self.burn = Burn({
@@ -23,7 +23,6 @@ end
 
 function Player:draw()
 
-  love.graphics.clear()
   love.graphics.setColor(150,100,200)
   love.graphics.rectangle("fill", 5, 5, 30, 30)
   
