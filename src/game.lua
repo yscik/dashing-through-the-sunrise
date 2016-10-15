@@ -76,6 +76,8 @@ function game.load(arg)
 
     engine:addEntity(target)
     engine:addEntity(cursor)
+
+    Timer.every(1, function() world:update(1) end)
     
 end
 

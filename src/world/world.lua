@@ -14,6 +14,10 @@ function World:add(entity)
 
 end
 
+function World:update(dt)
+  _.invoke(self.entities, 'update', dt)
+end
+
 function World:get(entity)
 
 end
