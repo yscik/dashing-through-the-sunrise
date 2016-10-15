@@ -1,1 +1,0 @@
-Clickable = DataComponent("Clickable")

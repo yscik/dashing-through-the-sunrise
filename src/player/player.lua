@@ -3,16 +3,17 @@ Player = class("Player", Entity)
 
 function Player:initialize(cursor)
   Entity.initialize(self)
-  
-  self:add(Position({x=300, y=200, r = 0}))
+
+  local pos = {x=300, y=200}
+  self:add(Position({at = pos, center = {20, 20}}))
   self:add(Velocity())
-  self:add(Canvas(40,40))
+  self:add(Canvas(40))
   
   self.battery = Storage({type = Resource.Power, capacity = 300, content = 200})
   
   self.burn = Burn({
       source = Consume({type = Resource.Power, rate = 1, sources = {self.battery}}), 
-      target = Target({source = cursor, button = 'r'})
+      target = Target({source = cursor, button = 'r', x = 0, y = 0})
     })
   
   self:add(self.burn)

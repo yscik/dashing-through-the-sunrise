@@ -5,10 +5,10 @@ function Asteroid:initialize(pos)
   Entity.initialize(self)
   
   self.path = {10,300, 54,206, 150,170, 300,200, 330,250, 250,350, 200, 340, 70,380, 10,300};
-  
-  self:add(Position(pos))
-  self:add(Canvas(350,400))
-  self:add(Clickable({shape = self.path, command = 
+
+  self:add(Canvas(350, 400))
+--  self:add(Velocity(0,0, 0.3))
+  self:add(Hitbox({shape = self.path, command =
         PanelCommand { content = {
             {type = "Title", label = "Asteroid" },
             {type = "Info", label = "Resources" },
@@ -16,6 +16,8 @@ function Asteroid:initialize(pos)
             {label = "Build powerplant", action = BuildCommand { parent = self } }
           }, entity = self }
     }))
+
+  self:add(Position({at = pos, center = self:get('Hitbox').center}))
   
   self:add(Resources({
       Storage({type = 'Silicon', content = 1000})

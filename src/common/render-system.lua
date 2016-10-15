@@ -3,19 +3,18 @@ RenderSystem = class("RenderSystem", System)
 
 function RenderSystem:draw()
 
-  local function render_at(pos, dim, fn)
-    local cx, cy = dim.width/2, dim.height/2
+  local function render_at(pos, fn)
     love.graphics.push()
-    love.graphics.translate((pos.x or 0), (pos.y or 0))
-    love.graphics.rotate((pos.r or 0) % (2*math.pi))
-    love.graphics.translate(-cx, -cy)
+    love.graphics.translate(pos.at.x, pos.at.y)
+    love.graphics.rotate(pos.at.r or 0 % (2*math.pi))
+    love.graphics.translate(-pos.center.x, -pos.center.y)
     fn()
     love.graphics.pop()
-    love.graphics.circle("fill", (pos.x or 0), (pos.y or 0), 2)
+    love.graphics.circle("fill", pos.at.x, pos.at.y, 2)
   end
 
   local function render(entity)
-    local canvasc, pos = entity:get("Canvas"), entity:get("Position").pos
+    local canvasc, pos = entity:get("Canvas"), entity:get("Position")
 
     if entity.draw then
       love.graphics.setCanvas(canvasc.canvas)
@@ -27,7 +26,7 @@ function RenderSystem:draw()
       love.graphics.setBlendMode("alpha")
 
       camera:attach()
-      render_at(pos, canvasc, function()
+      render_at(pos, function()
         love.graphics.draw(canvasc.canvas)
       end)
       camera:detach()
@@ -37,16 +36,22 @@ function RenderSystem:draw()
 
 
   local function outline(entity)
-    local clk, canvasc, pos = entity:get("Clickable"), entity:get("Canvas"), entity:get("Position").pos
-
-    if not clk.hover or not clk.shape then return end
+    local clk, pos = entity:get("Hitbox"), entity:get("Position")
 
     camera:attach()
-    render_at(pos, canvasc, function()
-      love.graphics.setColor(42,145,225)
-      love.graphics.setLineWidth(6)
-      love.graphics.line(clk.shape)
-    end)
+
+    if clk.hover and clk.shape then
+      render_at(pos, function()
+        love.graphics.setColor(42,145,225)
+        love.graphics.setLineWidth(2)
+        love.graphics.line(clk.shape)
+      end)
+    end
+
+    love.graphics.setColor(255,57,140)
+    love.graphics.setLineWidth(1)
+    clk.hc:draw()
+
 
     camera:detach()
 
@@ -58,5 +63,5 @@ function RenderSystem:draw()
 end
 
 function RenderSystem:requires()
-    return {render = {"Canvas", "Position"}, outline = {"Position", "Canvas", "Clickable"}}
+    return {render = {"Canvas", "Position"}, outline = {"Position", "Canvas", "Hitbox"}}
 end

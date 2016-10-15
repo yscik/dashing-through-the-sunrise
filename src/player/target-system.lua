@@ -1,9 +1,4 @@
-Target = Component.create("Target")
-
-function Target:initialize(settings)
-  extend(self, settings)
-  
-end
+Target = DataComponent("Target")
 
 TargetSystem = class("TargetSystem", System)
 

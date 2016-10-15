@@ -7,9 +7,13 @@ end
 
 Powerplant = class("Powerplant", Building)
 
-function Powerplant:initialize(asteroid, position)
+function Powerplant:initialize(asteroid, pos)
   Building.initialize(self)
-  self:add(Position(position))
+
+  self.path = {10,100, 0,80, 5,55, 8,30, 1,0, 30,0, 28,50, 35,75, 30,100, 10,100};
+  self:add(Hitbox({shape = self.path, inactive = true}))
+
+  self:add(Position({reference = pos, center = {20, 100}}))
   self:add(Canvas(50, 120))
 
 --  local generator = Generate({type = Resource.Power, amount: 5, cost: Consume({type = Resource.Silicon, amount: 12})}
@@ -18,12 +22,11 @@ function Powerplant:initialize(asteroid, position)
 --  self:add(ResourceLink({type = Resource.Silicon, source = asteroid}))
 --
 
-  self.path = {10,100, 0,80, 5,55, 8,30, 1,0, 30,0, 28,50, 35,75, 30, 100};
 
 end
 
 function Powerplant:built()
-  self:add(Clickable({shape = self.path}))
+  self:get("Hitbox").inactive = false
 end
 
 function Building:draw ()

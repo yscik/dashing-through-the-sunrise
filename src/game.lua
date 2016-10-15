@@ -4,7 +4,6 @@ lovetoys.initialize({globals = true, debug = true})
 vector = require 'lib/hump/vector-light'
 Camera = require 'lib/hump/camera'
 Timer = require 'lib/hump/timer'
-extend = require 'src/utils/extend'
 _ = require 'lib/moses/moses'
 
 suit = require 'lib/suit'
@@ -16,7 +15,7 @@ require 'src/control/input-state'
 require 'src/control/input-system'
 require 'src/control/command'
 require 'src/control/cursor-entity'
-require 'src/control/clickable-component'
+require 'src/control/hitbox-component'
 
 require 'src/ui/panel'
 require 'src/ui/ui-components'
@@ -43,7 +42,9 @@ require 'src/world/asteroid'
 require 'src/build/buildcommand'
 require 'src/build/powerplant-entity'
 
-function love.load(arg)
+game = {}
+
+function game.load(arg)
     
     if arg[#arg] == "-debug" then require("mobdebug").start() end
 
@@ -79,7 +80,7 @@ function love.load(arg)
     
 end
 
-function love.draw()
+function game.draw()
     engine:draw()
     ui:draw()
     suit.draw()
@@ -92,12 +93,12 @@ function love.draw()
 
 end
 
-function love.update(dt)
+function game.update(dt)
   
   Timer.update(dt)
   engine:update(dt)
-  local pos = player:get("Position").pos
-  camera:move((pos.x-camera.x)/2, (pos.y-camera.y)/2)
+  local pos = player:get("Position")
+  camera:move((pos.at.x-camera.x)/2, (pos.at.y-camera.y)/2)
 
   if love.keyboard.isDown('escape') then
     love.event.quit()
