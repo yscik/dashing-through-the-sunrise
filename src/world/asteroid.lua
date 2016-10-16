@@ -1,12 +1,19 @@
 
 Asteroid = class("Asteroid", Entity)
 
-function Asteroid:initialize(pos)
+function Asteroid:initialize(pos, options)
   Entity.initialize(self)
-  
-  self.path = {10,300, 54,206, 150,170, 300,200, 330,250, 250,350, 200, 340, 70,380, 10,300};
+  options = _.defaults(options or {}, {
+    base = {0,0, 100,0, 100,100, 0,100 },
+    seed = love.math.random(-100,100),
+    size = options and options.base and 100 or love.math.random(40,130)
 
---  self:add(Velocity(0,0, 0))
+  })
+
+
+  self:setPath(self:generate(options))
+
+  self:add(Velocity(0,0, 0))
   self:add(Hitbox({shape = self.path, command =
         PanelCommand { content = {
             {type = "title", label = "Asteroid" },
@@ -16,7 +23,7 @@ function Asteroid:initialize(pos)
           }, entity = self }
     }))
 
-  self:add(Position({at = pos, center = self:get('Hitbox').center}))
+  self:add(Position({at = pos, center = self:get('Hitbox').center, z = 1}))
   self:add(Render())
 
   self:add(Resources({
@@ -25,11 +32,24 @@ function Asteroid:initialize(pos)
 
 end
 
+function Asteroid:setPath(path)
+  self.path = path
+  self.renderPath = love.math.triangulate(self.path)
+
+end
+
 function Asteroid:draw ()
 
   love.graphics.setColor(200,200,200)
-  love.graphics.polygon("fill", self.path)
+  _.each(self.renderPath, function(k, path)
+    love.graphics.polygon("fill", path)
+  end)
 
+end
+
+function Asteroid:force(x,y,r)
+  local v = self:get('Velocity')
+  v.x, v.y, v.r = x or 0, y or 0, r or 0
 end
 
 

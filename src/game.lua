@@ -8,8 +8,8 @@ _ = require 'lib/moses/moses'
 
 suit = require 'lib/suit'
 
-
 require 'src/utils/datacomponent'
+require 'src/utils/color'
 
 require 'src/control/input-state'
 require 'src/control/input-system'
@@ -38,6 +38,7 @@ require 'src/resource/resource-system'
 
 require 'src/world/world'
 require 'src/world/asteroid'
+require 'src/world/asteroid-builder'
 
 require 'src/build/buildcommand'
 require 'src/build/building-entity'
@@ -66,15 +67,18 @@ function game.load(arg)
     local target = TargetDisplay(player:get("Target"))
     local cursor = CursorEntity(inputSystem.input)
 
-    a1 = Asteroid({x =600, y = 200, r = 0})
-    local a2 = Asteroid({x = -200, y = -200, r = -0.6 })
 
     world = World(engine)
 
     engine:addEntity(player)
     world.player = player
-    world:add(a1)
+    world:add(Asteroid({x =600, y = 200, r = 0}))
+    local a2 = Asteroid({x = -200, y = -200, r = -2.6 }, {base = {10,300, 150,170, 300,200, 330,250, 250,350, 70,380}})
     world:add(a2)
+    world:add(Asteroid({x = 100, y = 100}))
+    world:add(Asteroid({x = 1000, y = -300, r = -2}, {base = {0,0, 100,-60, 200, -120, 300, 0, 400, -50, 500, 0, 400,100, 200, 100, 100, 130, 0,100 }}))
+
+    a2:force(0,1,0.1)
 
     engine:addEntity(target)
     engine:addEntity(cursor)
