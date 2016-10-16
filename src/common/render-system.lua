@@ -4,13 +4,13 @@ Render = Component.create("Render")
 
 function RenderSystem.atPosition(pos, fn, ...)
   love.graphics.push()
-  love.graphics.translate(pos.at.x, pos.at.y)
-  love.graphics.rotate(pos.at.r or 0 % (2*math.pi))
+  love.graphics.translate(pos:getXY())
+  love.graphics.rotate((pos:getR() or 0) % (2*math.pi))
   love.graphics.translate(-pos.center.x, -pos.center.y)
   fn(...)
   love.graphics.pop()
   love.graphics.setColor(255,255,255,150)
-  love.graphics.circle("fill", pos.at.x, pos.at.y, 2)
+--  love.graphics.circle("fill", pos.at.x, pos.at.y, 2)
 end
 
 function RenderSystem.render(entity)

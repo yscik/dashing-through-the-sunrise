@@ -39,6 +39,7 @@ require 'src/world/world'
 require 'src/world/asteroid'
 
 require 'src/build/buildcommand'
+require 'src/build/building-entity'
 require 'src/build/powerplant-entity'
 
 game = {}

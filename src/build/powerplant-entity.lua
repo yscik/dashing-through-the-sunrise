@@ -1,10 +1,4 @@
 
-Building = class("Powerplant", Entity)
-
-function Building:initialize()
-  Entity.initialize(self)
-end
-
 Powerplant = class("Powerplant", Building)
 
 function Powerplant:initialize(asteroid, pos)
@@ -14,7 +8,7 @@ function Powerplant:initialize(asteroid, pos)
   self.renderPath = love.math.triangulate(self.path)
   self:add(Hitbox({shape = self.path, inactive = true}))
 
-  self:add(Position({reference = pos, center = {20, 100}}))
+  self:add(Position({reference = pos, center = {20, 100}, z = 2, parent = asteroid:get('Position')}))
   self:add(Render())
 
 --  local generator = Generate({type = Resource.Power, amount: 5, cost: Consume({type = Resource.Silicon, amount: 12})}
@@ -30,10 +24,10 @@ function Powerplant:built()
   self:get("Hitbox").inactive = false
 end
 
-function Building:draw ()
+function Powerplant:draw ()
 
   local opacity = self.status / 100 * 255
-  love.graphics.setColor(130,140,150, opacity)
+  love.graphics.setColor(rgba("#189E57", opacity))
   _.each(self.renderPath, function(k, path)
     love.graphics.polygon("fill", path)
   end)

@@ -43,12 +43,13 @@ function InputSystem:checkHitbox(entity)
   if hitbox.inactive then return end
 
   local ox, oy = 0, 0
+  local pr,px,py = pos:getR(), pos:getXY()
   if (pos.center ~= hitbox.center) then
-    ox, oy = vector.rotate(pos.at.r or 0, hitbox.center.x - pos.center.x, hitbox.center.y - pos.center.y)
+    ox, oy = vector.rotate(pr, hitbox.center.x - pos.center.x, hitbox.center.y - pos.center.y)
   end
 
-  hitbox.hc:moveTo(pos.at.x + ox, pos.at.y + oy)
-  hitbox.hc:setRotation(pos.at.r)
+  hitbox.hc:moveTo(px + ox, py + oy)
+  hitbox.hc:setRotation(pr)
   hitbox.hover = hitbox.hc:contains(self.input.pos.x, self.input.pos.y)
 
   if hitbox.hover then

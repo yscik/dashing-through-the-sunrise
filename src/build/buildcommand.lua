@@ -18,9 +18,9 @@ function BuildCommand:checkTarget()
       self.plant.status = 0
       if input.target and input.target == self.parent then
         self.plant.status = 30
-        self.pos.x, self.pos.y = input.pos.x, input.pos.y
         local parentPos = self.parent:get('Position')
-        self.pos.r = vector.angleTo(parentPos.at.x - self.pos.x, parentPos.at.y - self.pos.y) - math.pi/2
+        self.pos.x, self.pos.y = vector.rotate(-parentPos.at.r, vector.sub(input.pos.x, input.pos.y, parentPos.at.x, parentPos.at.y))
+        self.pos.r = vector.angleTo(self.pos.x, self.pos.y) + math.pi/2
         if input.click then self:add() return true end
       end
       return false
