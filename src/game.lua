@@ -20,6 +20,7 @@ require 'src/control/hitbox-component'
 require 'src/ui/panel'
 require 'src/ui/ui-components'
 require 'src/ui/ui-service'
+require 'src/ui/font'
 
 require 'src/player/target-system'
 require 'src/player/burn-system'

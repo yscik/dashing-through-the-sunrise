@@ -9,7 +9,9 @@ end
 
 function Ui:addPanel(anchor, content)
   
-  self.panels[#self.panels+1] = Panel(anchor, content)
+  local panel = Panel(anchor, content)
+  self.panels[#self.panels+1] = panel
+  panel.id = #self.panels
 end
 
 
@@ -18,6 +20,8 @@ function Ui:removePanel(panel)
 end
 
 function Ui:draw()
+  suit.layout:reset(20, 200)
+  suit.layout:padding(10,10)
   _.invoke(self.panels, Panel.draw, self.system.camera)
 end
 

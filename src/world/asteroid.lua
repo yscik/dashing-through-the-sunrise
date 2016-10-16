@@ -9,8 +9,8 @@ function Asteroid:initialize(pos)
 --  self:add(Velocity(0,0, 0))
   self:add(Hitbox({shape = self.path, command =
         PanelCommand { content = {
-            {type = "Title", label = "Asteroid" },
-            {type = "Info", label = "Resources" },
+            {type = "title", label = "Asteroid" },
+            {type = "info", label = "Resources" , value = {Panel.printResources, self}},
             {label = "Scan", action = ScanCommand({target = self}) },
             {label = "Build powerplant", action = BuildCommand { parent = self } }
           }, entity = self }
