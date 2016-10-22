@@ -24,16 +24,24 @@ function MineCommand:checkTarget()
         pos.r = vector.angleTo(pos.x, pos.y) + math.pi/2
 
         self.rescon.source = {entity = input.target, position = Position({ at = pos, parent = parentPos})};
-        self.rescon:setup()
-        world:add(self.rescon)
+
+        self:goAndStart(input.pos)
+
         return true
       end
       return false
     end,
     cursor = self.cursor
   })
+end
+
 function MineCommand.cursor()
   love.graphics.setColor(rgba("#E71414"))
   love.graphics.rectangle("line", -5, -5, 10, 10)
 end
+
+function MineCommand:goAndStart(target)
+  systems.player:moveTo(target, {callback = function()
+    self.rescon:setup()
+  end })
 end

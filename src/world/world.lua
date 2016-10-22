@@ -14,6 +14,14 @@ function World:add(entity)
 
 end
 
+
+function World:remove(entity)
+
+  systems.engine:removeEntity(entity)
+  self.entities[entity.id] = nil
+
+end
+
 function World:update(dt)
   _.invoke(self.entities, 'update', dt)
 end

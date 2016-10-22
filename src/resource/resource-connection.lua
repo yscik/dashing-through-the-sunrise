@@ -10,16 +10,28 @@ function ResourceConnection:setup()
   self.type = 'Silicon'
   self:add(Position({}))
   self:add(Render())
+  systems.world:add(self)
 
-  --  local generator = Generate({type = Resource.Power, amount: 5, cost: Consume({type = Resource.Silicon, amount: 12})}
-  --  self:add(generator)
-  --  self:add(Resources({generator.cost, Storage({type = Resource.Power, capacity = 100})}))
-  --  self:add(ResourceLink({type = Resource.Silicon, source = asteroid}))
-  --
+end
+
+
+
+function ResourceConnection:close()
+
+  systems.world:remove(self)
 
 end
 
 function ResourceConnection:update (dt)
+
+  local sx,sy = self.source.position:getXY()
+  local tx,ty = self.target.position:getXY()
+  local distance = vector.dist(sx, sy, tx, ty)
+
+  if distance > 150 then
+    self:close()
+    return
+  end
 
   local source, target = self.source.entity:get('Resources'), self.target.entity:get('Resources')
 
