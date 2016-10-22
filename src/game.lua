@@ -80,13 +80,13 @@ function game.load(arg)
     systems.engine:addEntity(systems.player)
     systems.world.player = systems.player
 
-    systems.world:add(Asteroid({x =600, y = 200, r = 0}))
-    local a2 = Asteroid({x = -200, y = -200, r = -2.6 }, {base = {10,300, 150,170, 300,200, 330,250, 250,350, 70,380}})
+    systems.world:add(Asteroid({x =600, y = -150, r = 0}))
+    local a2 = Asteroid({x = -200, y = -200, r = -2.6 })
     systems.world:add(a2)
-    systems.world:add(Asteroid({x = 100, y = 100}))
+    systems.world:add(Asteroid({x = 100, y = -300}))
     systems.world:add(Asteroid({x = 1000, y = -300, r = -2}, {base = {0,0, 100,-60, 200, -120, 300, 0, 400, -50, 500, 0, 400,100, 200, 100, 100, 130, 0,100 }}))
 
-    a2:force(0,1,0.1)
+--    a2:force(0,1,0.1)
 
     systems.engine:addEntity(target)
     systems.engine:addEntity(systems.cursor)
