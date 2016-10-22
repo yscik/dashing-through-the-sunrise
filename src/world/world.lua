@@ -1,7 +1,7 @@
 
 World = class("World", Entity)
 
-function World:initialize(engine)
+function World:initialize()
   self.entities = {}
   
 end
@@ -9,7 +9,7 @@ end
 function World:add(entity)
 
 --  if not self.entities[entity.class.name] then self.entities[entity.class.name] = {} end
-  engine:addEntity(entity)
+  systems.engine:addEntity(entity)
   self.entities[entity.id] = entity
 
 end

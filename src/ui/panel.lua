@@ -14,7 +14,7 @@ function Panel:draw(camera)
     local pos = {suit.layout:row(180,30)}
     if option.action and suit.Button(option.label, {id= self.id .. '.'.. k}, unpack(pos)).hit then
       option.action:execute()
-      ui:removePanel(self)
+      systems.ui:removePanel(self)
     end
 
     if option.type == "title" then

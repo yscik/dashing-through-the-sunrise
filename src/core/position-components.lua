@@ -2,11 +2,20 @@ Position = Component.create("Position")
 
 function Position:initialize(o)
 
+  o = o or {}
   self.at = o.reference or _.extend({x = 0, y = 0, r = 0}, o.at)
   self.z = o.z or 0
   self.center = not o.center and {x = 0, y = 0} or #o.center > 0 and {x = o.center[1], y = o.center[2]} or o.center
 
   self.parent = o.parent
+end
+
+local dimensions = {"x", "y", "r"}
+
+function Position:set(o)
+  for k, dim in ipairs(dimensions) do
+    if o[dim] then self.at[dim] = o[dim] end
+  end
 end
 
 function Position:getXY()
@@ -22,8 +31,14 @@ function Position:getR()
   return (self.at.r or 0) + (self.parent and self.parent.at.r or 0)
 end
 
+
+--function Position:__tostring()
+--  return 'Position: [' .. table.__tostring(self.at) .. ']'
+--end
+
 Velocity = Component.create("Velocity", {"x", "y", "r"})
 
 function Velocity:initialize(x, y, r)
     _.extend(self, {x = x or 0, y = y or 0, r = r or 0})
 end
+

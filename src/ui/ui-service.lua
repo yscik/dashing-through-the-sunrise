@@ -1,8 +1,8 @@
 Ui = class("Ui", Entity)
 
-function Ui:initialize(camera, inputs)
+function Ui:initialize()
   Entity.initialize(self)
-  self.system = {camera = camera, input = inputs}
+
   self.panels = {}
   
 end
@@ -21,7 +21,7 @@ end
 function Ui:draw()
   suit.layout:reset(20, 200)
   suit.layout:padding(10,10)
-  _.invoke(self.panels, 'draw', self.system.camera)
+  _.invoke(self.panels, 'draw', systems.camera)
 end
 
 

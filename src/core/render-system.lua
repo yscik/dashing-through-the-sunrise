@@ -49,12 +49,12 @@ function RenderSystem:draw()
     return getZ(a) < getZ(b)
   end
 
-  _.sort(self.targets, sortZ)
+  local targets = _.sort({unpack(self.targets)}, sortZ)
 
-    for k, entity in pairs(self.targets) do
-      RenderSystem.render(entity)
-      RenderSystem.outline(entity)
-    end
+  for k, entity in pairs(targets) do
+    RenderSystem.render(entity)
+    RenderSystem.outline(entity)
+  end
 end
 
 function RenderSystem:requires()

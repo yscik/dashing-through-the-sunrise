@@ -5,7 +5,7 @@ function MineCommand:execute()
 
   self.rescon = ResourceConnection()
 
-  self.rescon.target = {entity = player, position = player:get('Position')}
+  self.rescon.target = {entity = systems.player, position = systems.player:get('Position')}
   self.rescon.active = false;
 
   self:checkTarget()
@@ -13,7 +13,8 @@ function MineCommand:execute()
 end
 
 function MineCommand:checkTarget()
-  ui:getTarget({ block_click = true,
+
+  systems.ui:getTarget({ block_click = true,
     callback = function(input)
       if input.click and input.target and input.target.class.name == "Asteroid" then
 

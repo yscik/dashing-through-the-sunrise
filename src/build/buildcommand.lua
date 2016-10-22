@@ -13,7 +13,7 @@ function BuildCommand:execute()
 end
 
 function BuildCommand:checkTarget()
-  ui:getTarget({ block_click = true,
+  systems.ui:getTarget({ block_click = true,
     callback = function(input)
       self.plant.status = 0
       if input.target and input.target == self.parent then

@@ -28,10 +28,10 @@ require 'src/player/burn-system'
 require 'src/player/player'
 require 'src/player/target-display'
 
-require 'src/common/position-components'
-require 'src/common/movement-system'
+require 'src/core/position-components'
+require 'src/core/movement-system'
 
-require 'src/common/render-system'
+require 'src/core/render-system'
 
 require 'src/resource/resource-types'
 require 'src/resource/resource-components'
@@ -52,68 +52,72 @@ game = {}
 function game.load(arg)
     
     if arg[#arg] == "-debug" then require("mobdebug").start() end
-    
-    engine = Engine()
-    engine:addSystem(MovementSystem())
 
-    inputSystem = InputSystem()
-    
-    engine:addSystem(inputSystem)
-    engine:addSystem(TargetSystem())
-    engine:addSystem(BurnSystem())
-    engine:addSystem(RenderSystem(), "draw")
-    
-    player = Player(inputSystem.input)
-    camera = Camera(0,0)
-    ui = Ui(camera, inputSystem)
-    camera.smoother = Camera.smooth.linear(1)
-    local target = TargetDisplay(player:get("Target"))
-    local cursor = CursorEntity(inputSystem.input)
+    systems = {}
 
-    ui:addPanel(CommandPanel({x = love.graphics.getWidth() - 60, y = 50}))
-    world = World(engine)
+    game.systems = systems
 
-    engine:addEntity(player)
-    world.player = player
-    world:add(Asteroid({x =600, y = 200, r = 0}))
+    systems.engine = Engine()
+    systems.engine:addSystem(MovementSystem())
+
+    systems.input = InputSystem()
+    
+    systems.engine:addSystem(systems.input)
+    systems.engine:addSystem(BurnSystem())
+
+    systems.engine:addSystem(RenderSystem(), "draw")
+    
+    systems.player = Player(systems.input.input)
+    systems.camera = Camera(0,0)
+    systems.ui = Ui(systems.camera, systems.input)
+    systems.camera.smoother = Camera.smooth.linear(1)
+    local target = TargetDisplay(systems.player.burn.target)
+    systems.cursor = CursorEntity(systems.input.input)
+
+    systems.ui:addPanel(CommandPanel({x = love.graphics.getWidth() - 60, y = 50}))
+    systems.world = World(systems.engine)
+
+    systems.engine:addEntity(systems.player)
+    systems.world.player = systems.player
+
+    systems.world:add(Asteroid({x =600, y = 200, r = 0}))
     local a2 = Asteroid({x = -200, y = -200, r = -2.6 }, {base = {10,300, 150,170, 300,200, 330,250, 250,350, 70,380}})
-    world:add(a2)
-    world:add(Asteroid({x = 100, y = 100}))
-    world:add(Asteroid({x = 1000, y = -300, r = -2}, {base = {0,0, 100,-60, 200, -120, 300, 0, 400, -50, 500, 0, 400,100, 200, 100, 100, 130, 0,100 }}))
+    systems.world:add(a2)
+    systems.world:add(Asteroid({x = 100, y = 100}))
+    systems.world:add(Asteroid({x = 1000, y = -300, r = -2}, {base = {0,0, 100,-60, 200, -120, 300, 0, 400, -50, 500, 0, 400,100, 200, 100, 100, 130, 0,100 }}))
 
     a2:force(0,1,0.1)
 
-    engine:addEntity(target)
-    engine:addEntity(cursor)
+    systems.engine:addEntity(target)
+    systems.engine:addEntity(systems.cursor)
 
-    Timer.every(1, function() world:update(1) end)
+    Timer.every(1, function() systems.world:update(1) end)
     
 end
 
 function game.draw()
 
-    camera:attach()
-    engine:draw()
-    camera:detach()
-    ui:draw()
+    systems.camera:attach()
+    systems.engine:draw()
+    systems.camera:detach()
+
+    systems.ui:draw()
     suit.draw()
 
     love.graphics.setColor(255,255,255)
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
     
     love.graphics.print("Player", 10, 30)
-    love.graphics.print("BAT: "..tostring(player.battery.content), 10, 50)
+    love.graphics.print("BAT: "..tostring(systems.player.battery.content), 10, 50)
+    love.graphics.print("Si: "..tostring(systems.player.storage.content), 10, 70)
 
 end
 
 function game.update(dt)
   
   Timer.update(dt)
-  engine:update(dt)
-  local pos = player:get("Position")
-  camera:move((pos.at.x-camera.x)/2, (pos.at.y-camera.y)/2)
+  systems.engine:update(dt)
+  local pos = systems.player:get("Position")
+  systems.camera:move((pos.at.x- systems.camera.x)/2, (pos.at.y- systems.camera.y)/2)
 
-  if love.keyboard.isDown('escape') then
-    love.event.quit()
-    end
 end
