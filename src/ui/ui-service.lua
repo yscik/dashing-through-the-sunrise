@@ -26,5 +26,20 @@ end
 
 
 function Ui:getTarget(callback)
-  return self.system.input:listenMouse(callback)
+  if callback.cursor then systems.cursor:setMode(callback.cursor) end
+
+  return systems.input:listenMouse(_.extend({}, callback, {after = function()
+    if callback.cursor then systems.cursor:reset() end
+  end}))
+end
+
+function Ui:clear()
+  local s = #self.panels
+  for i=s,1,-1 do
+    if not self.panels[i].permanent then
+      table.remove(self.panels, i)
+    end
+  end
+
+  return s ~= #self.panels
 end

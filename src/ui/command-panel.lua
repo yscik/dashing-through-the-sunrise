@@ -1,11 +1,17 @@
 CommandPanel = class("CommandPanel")
 
 function CommandPanel:initialize(pos)
+
   self.options = {
     {label = 'M', action = MineCommand() },
     {label = 'B', action = BuildCommand() }
   }
   self.pos = pos
+  self.permanent = true
+
+  systems.input:onKey('m', {callback = function()
+    MineCommand():execute()
+  end })
 end
 
 function CommandPanel:draw()

@@ -5,7 +5,7 @@ local HC = require 'lib/hc'
 function InputSystem:initialize()
   System.initialize(self)
   self.input = InputState()
-  self.listener = { mouse = {}}
+  self.listener = { mouse = {}, key = {}}
   
   love.mouse.setVisible(false)
   love.mousepressed = function(...) return self:click(...) end
@@ -18,23 +18,29 @@ function InputSystem:click(x, y, button)
     local ca = self.input.target:get('Hitbox')
     if ca and ca.command then ca.command:execute(self.input) end
   end
-
-  if button == 2 then 
-    self.input.move = {x = x, y = y}
-  end
   
 end
 
-function InputSystem:keyup(x, y, button)
-  if button == 1 then 
-    if self.input.command == nil then self.input.command = Command(self.input) end
-    if self.input.command:click() then self.input.command = nil end
+function InputSystem:keyup(key)
+
+  if self.listener.key[key] then
+    self.listener.key[key].callback(self.input)
   end
-  
+
+  if key == 'escape' then
+    return systems.ui:clear() or love.event.quit()
+  end
+
 end
 
 function InputSystem:listenMouse(options)
   self.listener.mouse[#self.listener.mouse+1] = options
+end
+
+
+function InputSystem:onKey(key, options)
+  self.listener.key[key] = options
+  options.removeListener = _.bind(self.onKey, self, key, nil)
 end
 
 function InputSystem:checkHitbox(entity)
@@ -82,7 +88,10 @@ function InputSystem:update(dt)
   end
 
   for i, listener in ipairs(self.listener.mouse) do
-    if listener.callback(self.input) then self.listener.mouse[i] = nil end
+    if listener.callback(self.input) then
+      if self.listener.mouse[i].after then self.listener.mouse[i].after() end
+      self.listener.mouse[i] = nil
+    end
   end
   
 end
