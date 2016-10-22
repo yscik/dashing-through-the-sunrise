@@ -18,6 +18,7 @@ require 'src/control/cursor-entity'
 require 'src/control/hitbox-component'
 
 require 'src/ui/panel'
+require 'src/ui/command-panel'
 require 'src/ui/ui-components'
 require 'src/ui/ui-service'
 require 'src/ui/font'
@@ -67,7 +68,7 @@ function game.load(arg)
     local target = TargetDisplay(player:get("Target"))
     local cursor = CursorEntity(inputSystem.input)
 
-
+    ui:addPanel(CommandPanel({x = love.graphics.getWidth() - 60, y = 50}))
     world = World(engine)
 
     engine:addEntity(player)

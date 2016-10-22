@@ -10,7 +10,7 @@ end
 
 function Panel:draw(camera)
 
-  function drawOption(k, option)
+  local function drawOption(k, option)
     local pos = {suit.layout:row(180,30)}
     if option.action and suit.Button(option.label, {id= self.id .. '.'.. k}, unpack(pos)).hit then
       option.action:execute()

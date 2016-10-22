@@ -7,9 +7,8 @@ function Ui:initialize(camera, inputs)
   
 end
 
-function Ui:addPanel(anchor, content)
+function Ui:addPanel(panel)
   
-  local panel = Panel(anchor, content)
   self.panels[#self.panels+1] = panel
   panel.id = #self.panels
 end
@@ -22,7 +21,7 @@ end
 function Ui:draw()
   suit.layout:reset(20, 200)
   suit.layout:padding(10,10)
-  _.invoke(self.panels, Panel.draw, self.system.camera)
+  _.invoke(self.panels, 'draw', self.system.camera)
 end
 
 
