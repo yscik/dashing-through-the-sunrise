@@ -23,7 +23,7 @@ require 'src/ui/ui-components'
 require 'src/ui/ui-service'
 require 'src/ui/font'
 
-require 'src/player/target-system'
+require 'src/player/target-component'
 require 'src/player/burn-system'
 require 'src/player/player'
 require 'src/player/target-display'

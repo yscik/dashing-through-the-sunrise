@@ -4,7 +4,7 @@ Player = class("Player", Entity)
 function Player:initialize(cursor)
   Entity.initialize(self)
 
-  local pos = {x=300, y=200}
+  local pos = {x=500, y=-600}
   self:add(Position({at = pos, center = {20, 20}, z = 2}))
   self:add(Velocity())
   self:add(Render())
@@ -13,16 +13,16 @@ function Player:initialize(cursor)
   
   self.burn = Burn({
       source = Consume({type = Resource.Power, rate = 1, sources = {self.battery}}), 
-      target = Target({source = cursor, button = 'r', x = 0, y = 0})
+      target = Target({})
     })
   
   self:add(self.burn)
-  self:add(self.burn.target)
 
   self.storage = Storage({type = 'Silicon', content = 0, capacity = 400})
   self:add(Resources({
     self.storage
   }))
+
   
 end
 
@@ -34,8 +34,8 @@ function Player:draw()
 end
 
 
-function Player:burnto(target)
-  self.burn.target = target
+function Player:moveTo(...)
+  self.burn.target:set(...)
 end
 
 

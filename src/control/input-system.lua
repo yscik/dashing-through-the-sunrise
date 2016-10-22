@@ -62,11 +62,8 @@ end
 function InputSystem:setInputState()
   local input = self.input
 
-  input.pos.x, input.pos.y = camera:mousePosition()
+  input.pos.x, input.pos.y = systems.camera:mousePosition()
   input.click = love.mouse.isDown(1)
-  if love.mouse.isDown(2) then
-    self.input.move = {x = x, y = y }
-  end
 
   input.target = nil
 end
@@ -74,6 +71,11 @@ end
 function InputSystem:update(dt)
 
   self:setInputState()
+
+  if love.mouse.isDown(2) then
+    systems.player:moveTo(self.input.pos)
+  end
+
 
   for k, entity in pairs(self.targets) do
     self:checkHitbox(entity)

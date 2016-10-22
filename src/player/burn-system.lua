@@ -11,9 +11,9 @@ function BurnSystem:update(dt)
     for k, entity in pairs(self.targets) do
       
         local burn, pos, v = entity:get("Burn"), entity:get("Position"), entity:get("Velocity")
-        if burn.target.set then
+        if burn.target.active then
           
-            local tx,ty = burn.target.x - pos.at.x, burn.target.y - pos.at.y
+            local tx,ty = burn.target.pos.at.x - pos.at.x, burn.target.pos.at.y - pos.at.y
             local dx,dy = vector.normalize(tx,ty)
             local l = vector.len(tx,ty)
             local current_speed = vector.len(v.x, v.y)
@@ -27,7 +27,7 @@ function BurnSystem:update(dt)
             
             if vector.len(tx, ty) < 5 then
               v.x, v.y, v.r = 0, 0, 0
-              burn.target.set = false
+              burn.target:reached()
             end
         end
     end
