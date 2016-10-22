@@ -18,6 +18,11 @@ function Player:initialize(cursor)
   
   self:add(self.burn)
   self:add(self.burn.target)
+
+  self.storage = Storage({type = 'Silicon', content = 0, capacity = 400})
+  self:add(Resources({
+    self.storage
+  }))
   
 end
 

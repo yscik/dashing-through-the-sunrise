@@ -36,6 +36,7 @@ require 'src/common/render-system'
 require 'src/resource/resource-types'
 require 'src/resource/resource-components'
 require 'src/resource/resource-system'
+require 'src/resource/resource-connection'
 
 require 'src/world/world'
 require 'src/world/asteroid'
@@ -44,6 +45,7 @@ require 'src/world/asteroid-builder'
 require 'src/build/buildcommand'
 require 'src/build/building-entity'
 require 'src/build/powerplant-entity'
+require 'src/tool/mine'
 
 game = {}
 
