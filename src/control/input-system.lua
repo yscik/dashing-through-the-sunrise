@@ -14,7 +14,7 @@ function InputSystem:initialize()
 end
 
 function InputSystem:click(x, y, button)
-  if button == 1 and self.input.target and not _.any(self.listener, 'block_click') then
+  if button == 1 and self.input.target and not _.findWhere(self.listener.mouse, {block_click = true}) then
     local ca = self.input.target:get('Hitbox')
     if ca and ca.command then ca.command:execute(self.input) end
   end
