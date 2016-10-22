@@ -1,10 +1,14 @@
 
-local HC = require 'lib/hc'
+local Polygon = require 'lib/hc.polygon'
+local v2 = require 'lib/hump/vector'
 
 function Asteroid:generate(o)
 
   local path = _.clone(o.base)
   local steps = {}
+  local mark = {}
+  local normal = {}
+
 
   local noise = 1
 
@@ -45,6 +49,14 @@ function Asteroid:generate(o)
 
   end
 
+  local function getNormal(i)
+    local a, c, b = v2(p(i-2), p(i-1)), v2(p(i), p(i+1)), v2(p(i+2), p(i+3))
+
+    return ((a - c) + (c - b)):rotated(math.pi/2):normalized():unpack()
+
+
+  end
+
   local function subd()
     for i = 1, #path*2, 4 do
       addPoint(i)
@@ -57,60 +69,86 @@ function Asteroid:generate(o)
       end
   end
 
+
   local function scale(s)
-    local hc = HC.polygon(unpack(_.take(path, #path - 2)))
-    hc:scale(s)
-    path = {hc:unpack()}
+    local newPath = {}
+    local shape = Polygon(unpack(path))
+    for i = 1, #path, 2 do
+      local nx, ny = getNormal(i)
+
+      local cx, cy = p(i), p(i+1)
+      normal[i], normal[i+1] = nx, ny
+      newPath[i], newPath[i+1] = cx + nx * s, cy + ny * s
+    end
+    path = newPath
   end
 
+  mark[3] = true
 
---  steps[#steps+1] = _.clone(path)
-
---  scale(2)
---  subd()
---  if #o.base > 10 then
---    noise(40)
---  end
---  subd()
---  noise(10)
---  subd()
---  noise(5)
-
---  smoothPoint(1)
---  smoothPoint(3)
---  smoothPoint(5)
-
---  steps[#steps+1] = _.clone(path)
---  transform()
-
+  local function step()
+    steps[#steps+1] = {path = _.clone(path), normal = normal, mark = mark }
+    normal = {}
+  end
 --
---  path[#path+1] = path[1]
---  path[#path+1] = path[2]
+--  local function scale(s)
+--    local hc = Polygon(unpack(path))
+--    hc:scale(s)
+--    path = {hc:unpack()}
+--  end
 
-  return path
---  return steps
+
+  subd()
+  scale(0)
+  step()
+
+    noise(10)
+--  scale(20)
+--  step()
+
+  scale(-60)
+
+  step()
+
+--  return path
+
+   return steps
 
 end
---
---function Asteroid:update(dt)
---  self.options.seed = self.options.seed + 1
---  self.path = self:generate(self.options)
---end
---
---function Asteroid:draw ()
---
---  local stepSize = (255 / #self.path)
---
---  for i = 1, #self.path, 1 do
---    local path = self.path[i]
---    love.graphics.setColor(rgba("#843939", stepSize * i))
---    love.graphics.polygon("line", path)
-----    love.graphics.setColor(250,250,250, stepSize * i)
-----
-----    for i = 1, #path-1, 2 do
-----      love.graphics.circle('fill', path[i], path[i+1], 2)
-----
-----    end
---  end
---
---end
+
+function Asteroid:update(dt)
+  self.options.seed = self.options.seed + 1
+  self.path = self:generate(self.options)
+end
+
+function Asteroid:draw ()
+
+  local stepSize = (255 / #self.path)
+
+
+  for s = 1, #self.path, 1 do
+    local step = self.path[s]
+    love.graphics.setLineWidth(2)
+    love.graphics.setColor(rgba("#843939", stepSize * s))
+    love.graphics.polygon("line", step.path)
+
+
+    for i = 1, #step.path-1, 2 do
+      if step.mark[i] then love.graphics.setColor(rgba("#00C619"))
+      else love.graphics.setColor(250,250,250, stepSize * s)
+      end
+
+      love.graphics.circle('fill', step.path[i], step.path[i+1], 2)
+
+    end
+
+    if #step.normal == #step.path then
+    for i = 1, #step.path-1, 2 do
+      love.graphics.setLineWidth(1)
+      love.graphics.setColor(rgba("#499D53", stepSize * s))
+      love.graphics.line(step.path[i], step.path[i+1], step.path[i] + step.normal[i]*20, step.path[i+1] + step.normal[i+1]*20)
+    end
+    end
+
+  end
+
+end
