@@ -89,7 +89,9 @@ end
 
 function game.draw()
 
+    camera:attach()
     engine:draw()
+    camera:detach()
     ui:draw()
     suit.draw()
 

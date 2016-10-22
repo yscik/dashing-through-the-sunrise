@@ -51,12 +51,10 @@ function RenderSystem:draw()
 
   _.sort(self.targets, sortZ)
 
-  camera:attach()
     for k, entity in pairs(self.targets) do
       RenderSystem.render(entity)
       RenderSystem.outline(entity)
     end
-  camera:detach()
 end
 
 function RenderSystem:requires()
