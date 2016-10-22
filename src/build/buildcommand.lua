@@ -7,7 +7,7 @@ function BuildCommand:execute()
   self.plant = Powerplant(self.parent, self.pos)
   self.plant.status = 0
 
-  world:add(self.plant)
+  systems.world:add(self.plant)
 
   self:checkTarget()
 end

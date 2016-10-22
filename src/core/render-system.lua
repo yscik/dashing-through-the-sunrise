@@ -28,7 +28,7 @@ function RenderSystem.outline(entity)
     RenderSystem.atPosition(pos, function()
       love.graphics.setColor(42,145,225)
       love.graphics.setLineWidth(2)
-      love.graphics.line(clk.shape)
+      love.graphics.polygon('line', clk.shape)
     end)
   end
 
