@@ -29,6 +29,11 @@ function MineCommand:checkTarget()
         return true
       end
       return false
-    end
+    end,
+    cursor = self.cursor
   })
+function MineCommand.cursor()
+  love.graphics.setColor(rgba("#E71414"))
+  love.graphics.rectangle("line", -5, -5, 10, 10)
+end
 end

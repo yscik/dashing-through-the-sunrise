@@ -7,11 +7,25 @@ function CursorEntity:initialize(input)
   self:add(Position({reference = input.pos, z = 10}))
   self:add(Render())
 
+  self.mode = nil
+
+end
+
+function CursorEntity:setMode(mode)
+  self.mode = mode
+end
+
+function CursorEntity:reset()
+  self.mode = nil
 end
 
 function CursorEntity:draw ()
-  
+
   love.graphics.setColor(150,100,200)
   love.graphics.setLineWidth(2)
-  love.graphics.circle("line", 0, 0, 6)
+
+  if not self.mode then
+    love.graphics.circle("line", 0, 0, 6)
+  else self.mode() end
+
 end
