@@ -4,15 +4,12 @@ Asteroid = class("Asteroid", Entity)
 function Asteroid:initialize(pos, options)
   Entity.initialize(self)
   options = _.defaults(options or {}, {
-    base =  {10,300, 150,170, 300,200, 330,250, 250,350, 70,380},
-    seed = love.math.random(-100,100),
-    size = options and options.base and 100 or love.math.random(40,130)
 
   })
 
   self.options = options
 
-  self:setPath(self:generate(options))
+  self:setPath({self:generate(options)})
 
   self:add(Velocity(0,0, 0))
   self:add(Hitbox({shape = self.path, command =
@@ -43,7 +40,7 @@ end
 
 function Asteroid:draw ()
 
-  love.graphics.setColor(200,200,200)
+  love.graphics.setColor(210,210,200)
   _.each(self.renderPath, function(k, path)
     love.graphics.polygon("fill", path)
   end)
