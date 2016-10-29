@@ -21,7 +21,7 @@ end
 
 function CursorEntity:draw ()
 
-  love.graphics.setColor(150,100,200)
+  love.graphics.setColor(rgba("#205E8D"))
   love.graphics.setLineWidth(2)
 
   if not self.mode then

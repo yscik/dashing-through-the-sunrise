@@ -4,7 +4,7 @@ Player = class("Player", Entity)
 function Player:initialize(cursor)
   Entity.initialize(self)
 
-  local pos = {x=500, y=-600}
+  local pos = {x=0, y=0}
   self:add(Position({at = pos, center = {20, 20}, z = 2}))
   self:add(Velocity())
   self:add(Render())
@@ -28,7 +28,7 @@ end
 
 function Player:draw()
 
-  love.graphics.setColor(150,100,200)
+  love.graphics.setColor(rgba('#6E6C6C'))
   love.graphics.rectangle("fill", 5, 5, 30, 30)
   
 end
