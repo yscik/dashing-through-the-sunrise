@@ -22,7 +22,7 @@ function ResourceConnection:close()
 
 end
 
-function ResourceConnection:update (dt)
+function ResourceConnection:tick ()
 
   local sx,sy = self.source.position:getXY()
   local tx,ty = self.target.position:getXY()
@@ -38,7 +38,7 @@ function ResourceConnection:update (dt)
   local from = _.findWhere(source.map.Storage, {type= self.type })
   local to = _.findWhere(target.map.Storage, {type= self.type })
 
-  local rate = 1 * dt
+  local rate = 1
 
   if to.content < to.capacity and from.content > rate then
     from.content = from.content - rate
