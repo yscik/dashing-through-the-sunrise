@@ -4,7 +4,7 @@ BuildCommand = DataComponent("BuildCommand")
 function BuildCommand:execute()
 
   self.pos = {x= 0, y = 0, r = 0}
-  self.plant = Powerplant(self.parent, self.pos)
+  self.plant = Plant(self.parent, self.pos)
   self.plant.status = 0
 
   systems.world:add(self.plant)

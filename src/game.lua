@@ -44,7 +44,8 @@ require 'src/world/asteroid-builder'
 
 require 'src/build/buildcommand'
 require 'src/build/building-entity'
-require 'src/build/powerplant-entity'
+require 'src/build/plant-entity'
+require 'src/build/plant-gen'
 require 'src/tool/mine'
 
 game = {}
