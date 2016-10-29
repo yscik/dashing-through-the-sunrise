@@ -93,7 +93,7 @@ function game.load(arg)
     systems.engine:addEntity(target)
     systems.engine:addEntity(systems.cursor)
 
-    Timer.every(1, function() systems.world:update(1) end)
+    Timer.every(1, function() systems.world:tick(1) end)
     
 end
 
@@ -118,6 +118,7 @@ end
 function game.update(dt)
   
   Timer.update(dt)
+  systems.world:update(dt)
   systems.engine:update(dt)
   local pos = systems.player:get("Position")
   systems.camera:move((pos.at.x- systems.camera.x)/2, (pos.at.y- systems.camera.y)/2)

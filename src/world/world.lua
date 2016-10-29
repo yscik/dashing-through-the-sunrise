@@ -22,6 +22,10 @@ function World:remove(entity)
 
 end
 
+function World:tick()
+  _.invoke(self.entities, 'tick')
+end
+
 function World:update(dt)
   _.invoke(self.entities, 'update', dt)
 end
