@@ -46,7 +46,7 @@ end
 function InputSystem:checkHitbox(entity)
   local hitbox, pos = entity:get("Hitbox"), entity:get("Position")
 
-  if hitbox.inactive then return end
+  if hitbox.inactive or not pos.visible then return end
 
   local ox, oy = 0, 0
   local pr,px,py = pos:getR(), pos:getXY()
