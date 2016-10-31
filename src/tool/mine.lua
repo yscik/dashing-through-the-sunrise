@@ -23,7 +23,7 @@ function MineCommand:checkTarget()
         pos.x, pos.y = vector.rotate(-parentPos.at.r, vector.sub(input.pos.x, input.pos.y, parentPos.at.x, parentPos.at.y))
         pos.r = vector.angleTo(pos.x, pos.y) + math.pi/2
 
-        self.rescon.source = {entity = input.target, position = Position({ at = pos, parent = parentPos})};
+        self.rescon.source = {storage = input.target.crust, position = Position({ at = pos, parent = parentPos})};
 
         self:goAndStart(input.pos)
 
@@ -41,7 +41,11 @@ function MineCommand.cursor()
 end
 
 function MineCommand:goAndStart(target)
-  systems.player:moveTo(target, {callback = function()
+  local px, py = systems.player:get('Position'):getXY()
+
+  local tx,ty = vector.add(target.x, target.y, vector.mul(50, vector.normalize(vector.sub(px, py, target.x, target.y))))
+
+  systems.player:moveTo({x = tx, y = ty}, {callback = function()
     self.rescon:setup()
   end })
 end
