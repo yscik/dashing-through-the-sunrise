@@ -4,7 +4,8 @@ function CommandPanel:initialize(pos)
 
   self.options = {
     {label = 'M', action = MineCommand() },
-    {label = 'B', action = BuildCommand() }
+    {label = 'B', action = BuildCommand() },
+    {label = 'E', action = systems.player.parts.elyz }
   }
   self.pos = pos
   self.permanent = true
@@ -17,8 +18,9 @@ end
 function CommandPanel:draw()
 
   local function drawOption(k, option)
-    local pos = {suit.layout:row(30,30)}
-    if option.action and suit.Button(option.label, {id= self.id .. '.'.. k}, unpack(pos)).hit then
+    local pos = {suit.layout:row(30,30) }
+    local active = option.action and option.action.active and {rgba('#1F86CB')} or nil
+    if option.action and suit.Button(option.label, {color = active, id= self.id .. '.'.. k}, unpack(pos)).hit then
       option.action:execute()
     end
 

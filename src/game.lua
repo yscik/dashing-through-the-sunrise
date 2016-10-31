@@ -28,6 +28,7 @@ require 'src/player/target-component'
 require 'src/player/burn-system'
 require 'src/player/player'
 require 'src/player/target-display'
+require 'src/player/electrolyzer'
 
 require 'src/core/position-components'
 require 'src/core/movement-system'
