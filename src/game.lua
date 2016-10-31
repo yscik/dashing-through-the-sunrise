@@ -19,6 +19,7 @@ require 'src/control/hitbox-component'
 
 require 'src/ui/panel'
 require 'src/ui/command-panel'
+require 'src/ui/status-panel'
 require 'src/ui/ui-components'
 require 'src/ui/ui-service'
 require 'src/ui/font'
@@ -77,6 +78,7 @@ function game.load(arg)
     systems.cursor = CursorEntity(systems.input.input)
 
     systems.ui:addPanel(CommandPanel({x = love.graphics.getWidth() - 60, y = 50}))
+    systems.ui:addPanel(StatusPanel(systems.player, {x = love.graphics.getWidth() - 210, y = 260}))
     systems.world = World(systems.engine)
 
     systems.engine:addEntity(systems.player)

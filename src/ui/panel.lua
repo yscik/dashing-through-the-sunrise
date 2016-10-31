@@ -28,6 +28,7 @@ function Panel:draw(camera)
     if option.type == "info" and option.value then
       love.graphics.setColor(255,255,255,255)
       love.graphics.printf(option.label, pos[1], pos[2], pos[3])
+
       if option.value[1] then option.value[1](option.value[2]) end
     end
 
@@ -56,14 +57,22 @@ function Panel:draw(camera)
 
 end
 
-function Panel.printResources(entity)
+function Panel.printResources(components)
 
-  for k,res in ipairs(entity:get('Resources').components) do
+  for k,res in ipairs(components) do
+    love.graphics.setColor(255,255,255,255)
     suit.layout:push(suit.layout:row(180,30))
     local pos = {suit.layout:col(120, 30)}
-    love.graphics.printf(res.type, pos[1], pos[2], pos[3])
+    love.graphics.printf(res.type or "", pos[1], pos[2], pos[3])
     pos = {suit.layout:col(120, 20)}
-    love.graphics.printf(res.content, pos[1], pos[2], pos[3])
+    love.graphics.printf(string.format('%.0f/%.0f', res.content or 0, res.capacity or 0), pos[1], pos[2], pos[3])
+
+    if res.capacity then
+      love.graphics.setColor(56,56,56, 150)
+      love.graphics.rectangle('fill', pos[1], pos[2] + 18, 50, 3)
+      love.graphics.setColor(rgba('#5AB5F1'))
+      love.graphics.rectangle('fill', pos[1], pos[2] + 18, 50 * (res.content / res.capacity), 3)
+    end
     suit.layout:pop()
   end
 

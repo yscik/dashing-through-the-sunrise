@@ -15,7 +15,7 @@ function Asteroid:initialize(pos, options)
   self:add(Hitbox({shape = self.path, command =
         PanelCommand { content = {
             {type = "title", label = "Asteroid" },
-            {type = "info", label = "Resources" , value = {Panel.printResources, self}},
+            {type = "info", label = "Resources" , value = {Panel.printResources, self:get('Resources').components}},
             {label = "Scan", action = ScanCommand({target = self}) },
             {label = "Build powerplant", action = BuildCommand { parent = self } }
           }, entity = self }
