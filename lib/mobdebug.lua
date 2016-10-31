@@ -1,0 +1,1 @@
+/home/yscik/dev/lib/lua-for-idea/resources/mobdebug/mobdebug.lua

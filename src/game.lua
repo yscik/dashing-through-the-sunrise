@@ -53,7 +53,7 @@ game = {}
 
 function game.load(arg)
     
-    if arg[#arg] == "-debug" then require("mobdebug").start() end
+    if arg[#arg] == "-debug" then require("lib/mobdebug").start() end
 
     systems = {}
 
