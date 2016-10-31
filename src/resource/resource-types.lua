@@ -1,4 +1,4 @@
-Resource = {
+Res = {
   Power = "Power",
   O2 = "Oxygen",
   H2 = "Hydrogen",
@@ -8,3 +8,5 @@ Resource = {
   Water = "Water",
   C = "Carbon"
 }
+
+Materials = { Res.Si, Res.Fe, Res.Water, Res.C}

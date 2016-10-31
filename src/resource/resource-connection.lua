@@ -7,7 +7,6 @@ function ResourceConnection:initialize()
 end
 function ResourceConnection:setup()
 
-  self.type = 'Silicon'
   self:add(Position({}))
   self:add(Render())
   systems.world:add(self)
@@ -33,10 +32,10 @@ function ResourceConnection:tick ()
     return
   end
 
-  local source, target = self.source.entity:get('Resources'), self.target.entity:get('Resources')
+  local source, target = self.source.storage, self.target.entity:get('Resources')
 
-  local from = _.findWhere(source.map.Storage, {type= self.type })
-  local to = _.findWhere(target.map.Storage, {type= self.type })
+  local from = source
+  local to = _.findWhere(target.map.Storage, {type= source.type })
 
   local rate = 1
 

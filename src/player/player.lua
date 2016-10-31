@@ -1,7 +1,7 @@
 
 Player = class("Player", Entity)
 
-function Player:initialize(cursor)
+function Player:initialize()
   Entity.initialize(self)
 
   local pos = {x=0, y=0}
@@ -9,10 +9,19 @@ function Player:initialize(cursor)
   self:add(Velocity())
   self:add(Render())
 
-  self.battery = Storage({type = Resource.Power, capacity = 300, content = 200})
+  self.tanks = {
+    Water = Storage({type = Res.Water, content = 0, capacity = 400}),
+    H2 = Storage({type = Res.H2, content = 100, capacity = 400}),
+    O2 = Storage({type = Res.O2, content = 100, capacity = 400})
+  }
+
+  self.battery = Storage({type = Res.Power, capacity = 300, content = 200})
   
   self.burn = Burn({
-      source = Consume({type = Resource.Power, rate = 1, sources = {self.battery}}), 
+      tank = Consume({rate = 1, multiple = true, sources = {
+        { storage = self.tanks.O2, rate = 0.5 },
+        { storage = self.tanks.H2, rate = 1 }
+        }}),
       target = Target({})
     })
   
@@ -20,12 +29,21 @@ function Player:initialize(cursor)
 
   self.storage = Storage({type = 'Silicon', content = 0, capacity = 400})
   self:add(Resources({
-    self.storage
+    self.storage,
+    self.battery,
+    self.tanks.Water,
+    self.tanks.H2,
+    self.tanks.O2
   }))
 
-  
+  self.parts = {}
+  self.parts.elyz = Electrolyzer({power = self.battery, water = self.tanks.Water, O2 = self.tanks.O2, H2 = self.tanks.H2})
+
 end
 
+function Player:tick(dt)
+  _.invoke(self.parts, 'tick', dt)
+end
 function Player:draw()
 
   love.graphics.setColor(rgba('#6E6C6C'))

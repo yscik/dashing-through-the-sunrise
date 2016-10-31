@@ -1,7 +1,7 @@
 Burn = DataComponent("Burn")
 
 function Burn:use(amount)
-  return self.source and self.source:use(amount)
+  return self.tank and self.tank:use(amount)
 end
 
 
