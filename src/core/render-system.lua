@@ -60,9 +60,9 @@ end
 
 function RenderSystem:draw()
 
-
-  if self.changed then
+  if self.changed or #self.targets ~= self.targetCount then
     self:sort()
+    self.targetCount = #self.targets
     self.changed = false
   end
 
