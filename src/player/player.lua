@@ -61,3 +61,11 @@ function Player:moveTo(...)
 end
 
 
+function Player:hook(target)
+  if self.harpoon then self.harpoon:destroy() end
+  self.harpoon = Harpoon(self, target)
+  systems.world:add(self.harpoon)
+end
+
+
+
