@@ -18,8 +18,12 @@ function InputSystem:click(x, y, button)
     local ca = self.input.target:get('Hitbox')
     if ca and ca.command then ca.command:execute(self.input) end
   end
-  
-end
+
+  if button == 2 then
+    systems.player:hook(self.input.pos)
+  end
+
+  end
 
 function InputSystem:keyup(key)
 
@@ -77,11 +81,6 @@ end
 function InputSystem:update(dt)
 
   self:setInputState()
-
-  if love.mouse.isDown(2) then
-    systems.player:moveTo(self.input.pos)
-  end
-
 
   for k, entity in pairs(self.targets) do
     self:checkHitbox(entity)

@@ -3,6 +3,7 @@ class = require 'lib/lovetoys/lib/middleclass'
 _ = require 'lib/moses/moses'
 
 require 'plant'
+require 'cgen'
 
 local e = null
 
@@ -10,7 +11,7 @@ function love.load(arg)
 
   if arg[#arg] == "-debug" then require("mobdebug").start() end
 
-  e = Plant()
+  e = Asteroid()
 
 
 end
@@ -18,14 +19,14 @@ end
 function love.draw()
 
   love.graphics.clear()
-  love.graphics.translate(900, 900)
+  love.graphics.translate(900, 500)
   e:draw()
 
 end
 
 function love.update(dt)
 
-  e:update(dt)
+  if e.update then e:update(dt) end
 
 end
 

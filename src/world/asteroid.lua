@@ -13,20 +13,10 @@ function Asteroid:initialize(pos, options)
 
   self:contents()
 
-  self:add(Velocity(0,0, 0))
-  self:add(Hitbox({shape = self.path, command =
-        PanelCommand { content = {
-            {type = "title", label = "Asteroid" },
-            {type = "info", label = "Resources" , value = {Panel.printResources, self:get('Resources').components}},
-            {label = "Scan", action = ScanCommand({target = self}) },
-            {label = "Build powerplant", action = BuildCommand { parent = self } }
-          }, entity = self }
-    }))
   self:add(Body({shape = self.renderPath, at = pos, mass = options.size * 1000, friction = 0.9, restitution = 0.3}))
 
-  self:add(Position({at = pos,
---    center = self:get('Hitbox').center,
-    z = 1}))
+
+  self:add(Position({z = 1}))
   self:add(Render())
 
 end
@@ -73,8 +63,9 @@ function Asteroid:draw ()
 end
 
 function Asteroid:force(x,y,r)
-  local v = self:get('Velocity')
-  v.x, v.y, v.r = x or 0, y or 0, r or 0
+  local b = self:get('Body')
+  b.body:applyLinearImpulse(x*20,y*20)
+  b.body:applyAngularImpulse(r*60)
 end
 
 

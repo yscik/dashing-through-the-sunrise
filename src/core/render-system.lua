@@ -16,7 +16,7 @@ end
 function RenderSystem:render(entity)
   local pos = entity:get("Position")
 
-  pos.visible = self:visible(pos)
+  pos.visible = true --self:visible(pos)
 
   if pos.visible then
     if entity.draw then

@@ -15,11 +15,11 @@ function Cluster:generate()
     return math.min(math.abs(ap.y - y), math.abs(ap.x - x)) < math.min(a.options.size, size) * 10
   end
 
-  for i = -5, 10, 1 do
-    for j = -5, 10, 1 do
-      local size = math.max(3, math.ceil(love.math.randomNormal(4,8)))
+  for i = -3, 6, 1 do
+    for j = -3, 6, 1 do
+      local size = math.max(3, math.ceil(love.math.randomNormal(4,6)))
 
-      local offset = size * 140
+      local offset = size * 60
       local px, py = i * offset + 100 * love.math.noise(self.seed, i, j), j * offset + 100 * love.math.noise(self.seed, j, i)
       local collisions = _.select(self.asteroids, overlaps, px, py, size)
       if #collisions > 0 then
@@ -31,9 +31,9 @@ function Cluster:generate()
       self.asteroids[#self.asteroids+1] = a
       systems.world:add(a)
 
-      if love.math.random(1,10) > 5 then
-        a:force(love.math.randomNormal(2, 2), love.math.randomNormal(2, 2), love.math.randomNormal(0.1, 0))
-      end
+--      if love.math.random(1,10) > 5 then
+--        a:force(love.math.randomNormal(10, 0), love.math.randomNormal(10, 0), love.math.randomNormal(0.8, 0))
+--      end
 
     end
   end

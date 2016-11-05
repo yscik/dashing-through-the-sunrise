@@ -28,7 +28,7 @@ require 'src/player/target-component'
 require 'src/player/burn-system'
 require 'src/player/player'
 require 'src/player/target-display'
-require 'src/player/electrolyzer'
+require 'src/player/harpoon'
 
 require 'src/core/position-components'
 require 'src/core/movement-system'
@@ -52,13 +52,15 @@ require 'src/build/plant-entity'
 require 'src/build/plant-gen'
 require 'src/tool/mine'
 
+debugWorldDraw = require('lib/debugWorldDraw')
 game = {}
 
 function game.load(arg)
     
-    if arg[#arg] == "-debug" then require("lib/mobdebug").start() end
+    if arg[#arg] == "-debug" then require("mobdebug").start() end
 
     systems = {}
+
 
     game.systems = systems
 
@@ -74,23 +76,28 @@ function game.load(arg)
 
     systems.engine:addSystem(RenderSystem(), "draw")
     
-    systems.player = Player(systems.input.input)
     systems.camera = Camera(0,0)
     systems.ui = Ui(systems.camera, systems.input)
     systems.camera.smoother = Camera.smooth.linear(1)
-    local target = TargetDisplay(systems.player.burn.target)
+--    local target = TargetDisplay(systems.player.burn.target)
     systems.cursor = CursorEntity(systems.input.input)
 
-    systems.ui:addPanel(CommandPanel({x = love.graphics.getWidth() - 60, y = 50}))
-    systems.ui:addPanel(StatusPanel(systems.player, {x = love.graphics.getWidth() - 210, y = 260}))
+--    systems.ui:addPanel(CommandPanel({x = love.graphics.getWidth() - 60, y = 50}))
+--    systems.ui:addPanel(StatusPanel(systems.player, {x = love.graphics.getWidth() - 210, y = 260}))
     systems.world = World(systems.engine)
 
+    local cluster = Cluster()
+    local a = cluster.asteroids[6];
+    local p = a:get('Position')
+    local body = a:get('Body').body
+    local x1, y1 = body:getWorldPoints(body:getFixtureList()[1]:getShape():getPoints())
+
+    systems.player = Player({x=x1, y = y1})
     systems.engine:addEntity(systems.player)
     systems.world.player = systems.player
 
-    Cluster()
 
-    systems.engine:addEntity(target)
+  --    systems.engine:addEntity(target)
     systems.engine:addEntity(systems.cursor)
 
     Timer.every(1, function() systems.world:tick(1) end)
@@ -101,6 +108,7 @@ function game.draw()
 
     systems.camera:attach()
     systems.engine:draw()
+--    debugWorldDraw(systems.physics.world,-5000, -5000,5000, 5000)
     systems.camera:detach()
 
     systems.ui:draw()
@@ -108,15 +116,11 @@ function game.draw()
 
     love.graphics.setColor(255,255,255)
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
-    
-    love.graphics.print("Player", 10, 30)
-    love.graphics.print("BAT: "..tostring(systems.player.battery.content), 10, 50)
-    love.graphics.print("Si: "..tostring(systems.player.storage.content), 10, 70)
 
 end
 
 function game.update(dt)
-  
+
   Timer.update(dt)
   systems.world:update(dt)
   systems.engine:update(dt)

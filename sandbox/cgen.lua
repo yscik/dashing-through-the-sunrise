@@ -21,14 +21,14 @@ function Asteroid:generate()
 --  local b = (inside1[4] - a) * 0.5 + a
 --  local inside2 = circle(b, scale / 3, seed +2)
 
-  return {outline, circle(center, scale*0.61, seed+0.23), circle(center, scale*0.31, seed+0.49)}
+  return {outline} --, circle(center, scale*0.61, seed+0.23), circle(center, scale*0.31, seed+0.49)}
 end
 
 function circle(center, scale, seed)
 
   local path = {}
 
-  local count = scale^0.5 * 8
+  local count = scale^0.5 * 30
   local baseAngle = math.pi*2 / count
   local v = vector(0,1)
 
@@ -46,7 +46,7 @@ function circle(center, scale, seed)
 end
 
 
-function Asteroid:update(dt)
+function Asteroid:reseed()
   self.paths = self:generate()
 end
 
@@ -65,8 +65,8 @@ function Asteroid:draw ()
     local path = self.paths[s]
 --    local op = stepSize * s
     local op = 255
-    love.graphics.setLineWidth(2)
-    love.graphics.setColor(100, 40, 30, op)
+    love.graphics.setLineWidth(6)
+    love.graphics.setColor(200, 160, 100, op)
     love.graphics.polygon("line", getPoints(path))
 
 
@@ -76,7 +76,7 @@ function Asteroid:draw ()
       love.graphics.setColor(200,200,200, op)
 --      end
 
-      love.graphics.circle('fill', path[i].x, path[i].y, 1)
+--      love.graphics.circle('fill', path[i].x, path[i].y, 1)
 
     end
 --
