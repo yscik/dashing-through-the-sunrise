@@ -22,6 +22,7 @@ function Asteroid:initialize(pos, options)
             {label = "Build powerplant", action = BuildCommand { parent = self } }
           }, entity = self }
     }))
+  self:add(Body({shape = self.renderPath, at = pos, mass = options.size * 1000, friction = 0.9, restitution = 0.3}))
 
   self:add(Position({at = pos,
 --    center = self:get('Hitbox').center,

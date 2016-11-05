@@ -34,6 +34,7 @@ require 'src/core/position-components'
 require 'src/core/movement-system'
 
 require 'src/core/render-system'
+require 'src/core/physics-system'
 
 require 'src/resource/resource-types'
 require 'src/resource/resource-components'
@@ -65,7 +66,9 @@ function game.load(arg)
     systems.engine:addSystem(MovementSystem())
 
     systems.input = InputSystem()
-    
+
+    systems.physics = PhysicsSystem()
+    systems.engine:addSystem(systems.physics)
     systems.engine:addSystem(systems.input)
     systems.engine:addSystem(BurnSystem())
 

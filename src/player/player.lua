@@ -4,9 +4,13 @@ Player = class("Player", Entity)
 function Player:initialize()
   Entity.initialize(self)
 
-  local pos = {x=0, y=0}
-  self:add(Position({at = pos, center = {20, 20}, z = 2}))
-  self:add(Velocity())
+
+  self:add(Position({at = pos, center = {20,20}, z = 2}))
+  local body = Body({shape = {{-15,15, 15,15, 15,-15, -15,-15}}, mass = 100, at = pos, friction = .8, restitution = 0.1})
+  body.body:setBullet(true)
+  body.body:setAngularDamping(.9)
+  body.body:setLinearDamping(.9)
+  self:add(body)
   self:add(Render())
 
   self.tanks = {
