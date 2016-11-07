@@ -17,6 +17,9 @@ end
 
 function World:remove(entity)
 
+  local body = entity:get('Body')
+  if body then body.body:destroy() end
+
   systems.engine:removeEntity(entity)
   self.entities[entity.id] = nil
 

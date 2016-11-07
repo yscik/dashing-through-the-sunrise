@@ -14,6 +14,9 @@ function InputSystem:initialize()
 end
 
 function InputSystem:click(x, y, button)
+
+  if button == 1 then
+    systems.player:fire(self.input.pos)
   end
 
  if button == 2 then

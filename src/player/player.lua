@@ -140,7 +140,12 @@ function Player:hook(target)
 end
 
 
+
+function Player:fire(target)
+  Rocket(self, target)
 end
 
 
+function Player:move(d)
 
+end

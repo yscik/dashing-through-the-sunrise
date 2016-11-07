@@ -29,6 +29,7 @@ require 'src/player/burn-system'
 require 'src/player/player'
 require 'src/player/target-display'
 require 'src/player/harpoon'
+require 'src/player/rocket'
 
 require 'src/core/position-components'
 require 'src/core/movement-system'
