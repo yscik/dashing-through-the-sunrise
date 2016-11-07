@@ -11,38 +11,12 @@ function Asteroid:initialize(pos, options)
 
   self:setPath({self:generate(options)})
 
-  self:contents()
-
-  self:add(Body({shape = self.renderPath, at = pos, mass = options.size * 1000, friction = 0.9, restitution = 0.3}))
+  self:add(Body({shape = self.renderPath, at = pos, mass = 2000 / options.size^0.5, friction = 0.5, restitution = 0.3}))
 
 
   self:add(Position({z = 1}))
   self:add(Render())
-
-end
-
-local colors = {
-  Water = '#9FAAC7',
-  Iron = '#7E898C',
-  Silicon = '#706B6B',
-  Carbon = '#625955',
-}
-
-function Asteroid:contents()
-  local mat = Materials[love.math.random(1,#Materials)]
-
-  self.crust = Storage({type = mat, content = 1000, capacity = 1000})
-
-  self:add(Resources({
-    self.crust
-  }))
-
-
-  self.color = {rgba(colors[mat]) }
-  local shade = love.math.random(0, 30) - 15
-  for i = 1, #self.color-1, 1 do
-    self.color[i] = self.color[i] + shade
-    end
+  self.color = love.math.randomNormal(30, 160)
 
 end
 
@@ -55,10 +29,14 @@ end
 
 function Asteroid:draw ()
 
-  love.graphics.setColor(unpack(self.color))
+  love.graphics.setColor(self.color, self.color, self.color, 255)
+--  love.graphics.polygon("line", self.path)
   _.each(self.renderPath, function(k, path)
     love.graphics.polygon("fill", path)
   end)
+  love.graphics.setColor(255,255,255,255)
+--  love.graphics.print(self.label, 100, 0)
+
 
 end
 
