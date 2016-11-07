@@ -86,15 +86,29 @@ function game.load(arg)
 --    systems.ui:addPanel(StatusPanel(systems.player, {x = love.graphics.getWidth() - 210, y = 260}))
     systems.world = World(systems.engine)
 
+    local x1, y1 = 0, 0
     local cluster = Cluster()
-    local a = cluster.asteroids[6];
+    local a = cluster.asteroids[math.floor(#cluster.asteroids/3)];
     local p = a:get('Position')
     local body = a:get('Body').body
-    local x1, y1 = body:getWorldPoints(body:getFixtureList()[1]:getShape():getPoints())
+    x1, y1 = body:getWorldPoints(body:getFixtureList()[1]:getShape():getPoints())
 
-    systems.player = Player({x=x1, y = y1})
-    systems.engine:addEntity(systems.player)
+    systems.player = Player({x=x1+30, y = y1+40})
     systems.world.player = systems.player
+    systems.world:add(systems.player)
+
+    local a = cluster.asteroids[math.floor(#cluster.asteroids/3+1)];
+    local p = a:get('Position')
+    local body = a:get('Body').body
+    x1, y1 = body:getWorldPoints(body:getFixtureList()[1]:getShape():getPoints())
+
+    local p2 = Player({x=x1+30, y = y1+40})
+    p2.color = {rgba('#A840D2') }
+    p2:get('Body').body:setAngle(2)
+    p2:get('Body').body:applyLinearImpulse(1000, 105)
+    systems.world:add(p2)
+
+--    Player({x=x1+30, y = y1+40})
 
 
   --    systems.engine:addEntity(target)

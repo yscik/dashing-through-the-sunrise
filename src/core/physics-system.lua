@@ -7,16 +7,18 @@ function Body:initialize(o)
   _.extend(self, o)
 
   self.body = love.physics.newBody(systems.physics.world, o.at.x, o.at.y, 'dynamic')
-  self.body:setMass(o.mass)
-  self.body:setAngularDamping(.5)
   self.fixtures = {}
-  _.each(o.shape, function(k, path)
-    local fix = love.physics.newFixture(self.body, love.physics.newPolygonShape(path))
+  if o.shape then _.each(o.shape, function(k, path)
+    local fix = love.physics.newFixture(self.body, love.physics.newPolygonShape(path), o.mass)
     fix:setFriction(o.friction or .5)
     fix:setRestitution(o.restitution or .5)
     self.fixtures[k] = fix
 
   end)
+  end
+
+--  self.body:setMassData(0,0,o.mass)
+--  self.body:setAngularDamping(.5)
 
 
 end
@@ -26,9 +28,18 @@ function PhysicsSystem:initialize()
   self.meter = 50
   love.physics.setMeter(self.meter)
   self.world = love.physics.newWorld(0, 0, true)
+
+  self.world:setCallbacks(self.onContact)
 end
 
 
+function PhysicsSystem.onContact(a,b, contact)
+  local ua, ub = a:getUserData(), b:getUserData()
+
+  if ua and ua.contact then ua.contact(b, contact) end
+  if ub and ub.contact then ub.contact(a, contact) end
+
+end
 function PhysicsSystem:gravity(a,b)
   if a == b then return end
   local ax, ay = a.body:getPosition()
@@ -37,7 +48,7 @@ function PhysicsSystem:gravity(a,b)
   local dx,dy = vector.normalize(ax-bx, ay-by)
   local r = vector.dist(ax,ay, bx, by) / self.meter
   if r == 0 then return end
-  local f = a.body:getMass() * b.body:getMass() / r^2 * 10 --* 6.674*10^-11
+  local f = a.body:getMass() * b.body:getMass() / r^2 * .01 --* 6.674*10^-11
 
   a.body:applyForce(-dx*f, -dy*f)
   b.body:applyForce(dx*f, dy*f)
