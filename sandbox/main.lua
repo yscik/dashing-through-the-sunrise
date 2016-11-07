@@ -2,8 +2,10 @@
 class = require 'lib/lovetoys/lib/middleclass'
 _ = require 'lib/moses/moses'
 
+require 'color'
 require 'plant'
-require 'cgen'
+--require 'cgen'
+require 'tri'
 
 local e = null
 
@@ -12,7 +14,6 @@ function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end
 
   e = Asteroid()
-
 
 end
 
