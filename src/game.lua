@@ -47,6 +47,8 @@ require 'src/world/cluster'
 require 'src/world/asteroid'
 require 'src/world/asteroid-builder'
 require 'src/world/background'
+require 'src/world/sun'
+
 require 'src/game/capture'
 
 require 'src/build/buildcommand'
@@ -88,6 +90,8 @@ function game.load(arg)
 --    systems.ui:addPanel(CommandPanel({x = love.graphics.getWidth() - 60, y = 50}))
 --    systems.ui:addPanel(StatusPanel(systems.player, {x = love.graphics.getWidth() - 210, y = 260}))
     systems.world = World(systems.engine)
+    systems.sun = Sun({scale = h})
+    systems.world:add(systems.sun)
 
     local x1, y1 = 0, 0
     local cluster = Cluster()
