@@ -1,13 +1,21 @@
 
 Harpoon = class("Harpoon", Entity)
 
+local function ppos(player, dx, dy)
+  local p = player:get('Position')
+  local px, py = vector.add(p.at.x, p.at.y, vector.rotate(p.at.r, dx or 10, dy or 10))
+
+  return px,py
+end
+
 function Harpoon:initialize(player, input)
   Entity.initialize(self)
 
   self.player = player
   self.growing = {size = 0}
   self.target = {x = 0, y = 0}
-  local px,py = self.player:get('Position'):getXY()
+
+  local px, py = ppos(player)
   local x,y = vector.add(px, py, vector.mul(1000, vector.normalize(input.x - px, input.y - py)))
 
   local hit = self:findTarget(x, y)
@@ -26,14 +34,16 @@ function Harpoon:initialize(player, input)
     end
   end)
 
-  self:add(Position({at = {0,0}, z = 2}))
+  self:add(Position({at = {0,0}, z = 2, absolute = true}))
 
   self:add(Render())
 
 end
 
 function Harpoon:findTarget(x, y)
-  local ppos, pbody = self.player:get('Position'), self.player:get('Body').body
+  local pbody = self.player:get('Body').body
+  local px, py = ppos(self.player, 30, -20)
+
   local hit = {fraction = 2};
 
   local function getBody(fixture, x, y, xn, yn, fraction)
@@ -45,15 +55,16 @@ function Harpoon:findTarget(x, y)
 
     return -1
   end
-  systems.physics.world:rayCast(ppos.at.x, ppos.at.y, x, y, getBody)
+  systems.physics.world:rayCast(px, py, x, y, getBody)
 
   return hit
 end
 
 function Harpoon:connect(hit)
 
-  local ppos, pbody = self.player:get('Position'), self.player:get('Body').body
-  self.joint = love.physics.newDistanceJoint(pbody, hit.body, ppos.at.x, ppos.at.y, hit.x, hit.y, true)
+  local px, py = ppos(self.player)
+  local pbody = self.player:get('Body').body
+  self.joint = love.physics.newDistanceJoint(pbody, hit.body, px, py, hit.x, hit.y, true)
   self.distance = self.joint:getLength()
   self.joint:setFrequency(10000)
   self.joint:setDampingRatio(.9)
@@ -68,6 +79,8 @@ function Harpoon:update(dt)
 
 --    self:get('Position')
     end
+    if l < self.distance * 0.9 and #self.player:get('Body').body:getContactList() > 0 then self:destroy() end
+
   end
 end
 
@@ -82,20 +95,22 @@ end
 
 function Harpoon:grow(dt, target)
   if self.destroyed then return end
-  local px, py = self.player:get('Position'):getXY()
+  local px, py = ppos(self.player)
   self.target.x, self.target.y = px + self.growing.size * (target.x - px), py + self.growing.size * (target.y - py)
   self.growing.size = self.growing.size + self.growing.rate * dt
 end
 
 function Harpoon:draw()
 
-  love.graphics.setColor(rgba('#D6BE80'))
+  love.graphics.setColor(rgba('#4F4444'))
   love.graphics.setLineWidth(2)
 
   if self.joint then
-    love.graphics.line(self.joint:getAnchors())
+    local px, py = ppos(self.player, 10, -10)
+    local target = {self.joint:getAnchors()}
+    love.graphics.line(px, py, target[3], target[4])
   else
-    local px,py = self.player:get('Position'):getXY()
+    local px, py = ppos(self.player, 10, -10)
     love.graphics.line(px,py, self.target.x, self.target.y)
   end
 
