@@ -16,9 +16,9 @@ end
 function RenderSystem:render(entity)
   local pos = entity:get("Position")
 
-  pos.visible = true --self:visible(pos)
+  pos.visible = self:visible(pos)
 
-  if pos.visible then
+  if pos.visible or pos.absolute then
     if entity.draw then
       RenderSystem.atPosition(pos, entity.draw, entity)
     end
@@ -44,33 +44,21 @@ function RenderSystem:outline(entity)
 
 end
 
-function RenderSystem:sort()
-
-  local function getZ(entity)
-    return entity:get('Position').z or 0
-  end
-
-  local function sortZ(a, b)
-    return getZ(a) < getZ(b)
-  end
-
-  self.items = _.sort(_.clone(self.targets, true), sortZ)
-
+function RenderSystem:initialize()
+  System.initialize(self)
+  self.items = {}
 end
 
 function RenderSystem:draw()
 
-  if self.changed or #self.targets ~= self.targetCount then
-    self:sort()
-    self.targetCount = #self.targets
-    self.changed = false
-  end
-
   local w,h = love.graphics.getDimensions()
   self.bb = {systems.camera.x - w, systems.camera.y - h, systems.camera.x + w, systems.camera.y + h }
 
-  for k, entity in ipairs(self.items) do
-    self:render(entity)
+  for z, items in pairs(self.items) do
+    for id, entity in pairs(items) do
+      if self.targets[entity.id] == nil then self.items[z][id] = nil
+      else self:render(entity) end
+    end
   end
 end
 
@@ -79,8 +67,15 @@ function RenderSystem:visible(pos)
 
 end
 
-function RenderSystem:onAddEntity()
-  self.changed = true
+
+local function getZ(entity)
+  return entity:get('Position').z or 0
+end
+
+function RenderSystem:onAddEntity(entity)
+  local z = getZ(entity)
+  if self.items[z] == nil then self.items[z] = {} end
+  self.items[z][entity.id] = entity
 end
 
 function RenderSystem:requires()
