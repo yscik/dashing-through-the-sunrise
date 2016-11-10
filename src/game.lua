@@ -10,6 +10,7 @@ suit = require 'lib/suit'
 
 require 'src/utils/datacomponent'
 require 'src/utils/color'
+require 'src/utils/math'
 
 require 'src/control/input-state'
 require 'src/control/input-system'
@@ -43,7 +44,7 @@ require 'src/resource/resource-system'
 require 'src/resource/resource-connection'
 
 require 'src/world/world'
-require 'src/world/cluster'
+require 'src/world/localcluster'
 require 'src/world/asteroid'
 require 'src/world/asteroid-builder'
 require 'src/world/background'
@@ -90,35 +91,20 @@ function game.load(arg)
 --    systems.ui:addPanel(CommandPanel({x = love.graphics.getWidth() - 60, y = 50}))
 --    systems.ui:addPanel(StatusPanel(systems.player, {x = love.graphics.getWidth() - 210, y = 260}))
     systems.world = World(systems.engine)
+
+    systems.world:add(LocalCluster())
+    local h = love.graphics.getHeight()/2
     systems.sun = Sun({scale = h})
     systems.world:add(systems.sun)
 
     local x1, y1 = 0, 0
-    local cluster = Cluster()
-    local a = cluster.asteroids[math.floor(#cluster.asteroids/3)];
-    local p = a:get('Position')
-    local body = a:get('Body').body
-    x1, y1 = body:getWorldPoints(body:getFixtureList()[1]:getShape():getPoints())
 
     systems.player = Player({x=x1+30, y = y1+40})
     systems.world.player = systems.player
     systems.world:add(systems.player)
 
-    local a = cluster.asteroids[math.floor(#cluster.asteroids/3+1)];
-    local p = a:get('Position')
-    local body = a:get('Body').body
-    x1, y1 = body:getWorldPoints(body:getFixtureList()[1]:getShape():getPoints())
-
-    local p2 = Player({x=x1+30, y = y1+40})
-    p2.color = {rgba('#A840D2') }
-    p2:get('Body').body:setAngle(2)
-    p2:get('Body').body:applyLinearImpulse(1000, 105)
-    systems.world:add(p2)
 
 --    Player({x=x1+30, y = y1+40})
-
-
-  --    systems.engine:addEntity(target)
     systems.engine:addEntity(systems.cursor)
 
     systems.bg = {
