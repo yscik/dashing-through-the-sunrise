@@ -14,12 +14,8 @@ function InputSystem:initialize()
 end
 
 function InputSystem:click(x, y, button)
-
-  if button == 1 then
-    systems.player:fire(self.input.pos)
-  end
-
- if button == 2 then
+  
+ if button == 1 then
     systems.player:hook(self.input.pos)
   end
 
@@ -32,7 +28,7 @@ function InputSystem:keyup(key)
   end
 
   if key == 'escape' then
-    return systems.ui:clear() or love.event.quit()
+    return love.event.quit()
   end
 
 end
@@ -61,7 +57,7 @@ function InputSystem:update(dt)
 
   self:setInputState()
 
---  systems.player:look(self.input.pos)
+  systems.player:lookAt(self.input.pos)
 
   for i, listener in ipairs(self.listener.mouse) do
     if listener.callback(self.input) then
@@ -69,7 +65,30 @@ function InputSystem:update(dt)
       self.listener.mouse[i] = nil
     end
   end
-  
+
+
+  if love.keyboard.isDown('space') then
+    systems.player:capture()
+  end
+
+  if love.keyboard.isDown('a') then
+    systems.player:rotate(-1)
+  end
+
+  if love.keyboard.isDown('d') then
+    systems.player:rotate(1)
+  end
+
+  if love.keyboard.isDown('w') then
+    systems.player:move(1)
+  end
+
+  if love.keyboard.isDown('s') then
+    systems.player:move(-1)
+  end
+
+
+
 end
 
 function InputSystem:requires()

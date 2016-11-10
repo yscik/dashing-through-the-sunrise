@@ -7,11 +7,13 @@ function Body:initialize(o)
   _.extend(self, o)
 
   self.body = love.physics.newBody(systems.physics.world, o.at.x, o.at.y, 'dynamic')
+  self.body:setUserData({component = self})
   self.fixtures = {}
   if o.shape then _.each(o.shape, function(k, path)
     local fix = love.physics.newFixture(self.body, love.physics.newPolygonShape(path), o.mass)
     fix:setFriction(o.friction or .5)
     fix:setRestitution(o.restitution or .5)
+    fix:setUserData({component = self})
     self.fixtures[k] = fix
 
   end)
@@ -48,7 +50,7 @@ function PhysicsSystem:gravity(a,b)
   local dx,dy = vector.normalize(ax-bx, ay-by)
   local r = vector.dist(ax,ay, bx, by) / self.meter
   if r == 0 then return end
-  local f = a.body:getMass() * b.body:getMass() / r^2 * .01 --* 6.674*10^-11
+  local f = a.body:getMass() * b.body:getMass() / r^2 * .006 --* 6.674*10^-11
 
   a.body:applyForce(-dx*f, -dy*f)
   b.body:applyForce(dx*f, dy*f)
