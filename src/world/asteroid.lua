@@ -31,6 +31,15 @@ function Asteroid:draw ()
 
 end
 
+function Asteroid:capture(player)
+  if not self.cap then
+    self.cap = Capture(self, player)
+    systems.world:add(self.cap)
+  else self.cap:progress()
+  end
+end
+function Asteroid:capture_end()
+  self.cap = nil
 end
 
 function Asteroid:force(x,y,r)

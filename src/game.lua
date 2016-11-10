@@ -47,6 +47,7 @@ require 'src/world/cluster'
 require 'src/world/asteroid'
 require 'src/world/asteroid-builder'
 require 'src/world/background'
+require 'src/game/capture'
 
 require 'src/build/buildcommand'
 require 'src/build/building-entity'

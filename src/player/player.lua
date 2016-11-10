@@ -36,7 +36,23 @@ function Player:headhit(body, contact)
   self.hits = self.hits + 1
 end
 
+function Player:isLanded()
+  local contacts = self:get('Body').body:getContactList()
+  local u;
+
+  _.each(contacts, function(k, contact)
+    local a,b = contact:getFixtures()
+    if a == self.foot then u = b:getUserData() end
+    if b == self.foot then u = a:getUserData() end
+  end)
+
+  if u and u.component and u.component.entity and u.component.entity.class.name == 'Asteroid' then
+    self.asteroid = u.component.entity
+  else self.asteroid = nil end
+end
+
 function Player:update(dt)
+  self:isLanded()
   local f = self:get('Position').flipped and -1 or 1
   self.avatar.leg = -math.abs(self.avatar.leg + (self:get('Body').body:getAngularVelocity()*f*0.7 - self.avatar.leg)*dt*10)
 --  self.avatar.head = self.avatar.head + dt*0.1
@@ -161,6 +177,11 @@ function Player:hook(target)
 --  end
 end
 
+function Player:capture()
+  if self.asteroid then
+    self.asteroid:capture(self)
+  end
+end
 
 function Player:fire(target)
   Rocket(self, target)
