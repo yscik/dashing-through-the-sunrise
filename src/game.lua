@@ -46,6 +46,7 @@ require 'src/world/world'
 require 'src/world/cluster'
 require 'src/world/asteroid'
 require 'src/world/asteroid-builder'
+require 'src/world/background'
 
 require 'src/build/buildcommand'
 require 'src/build/building-entity'
@@ -115,11 +116,20 @@ function game.load(arg)
   --    systems.engine:addEntity(target)
     systems.engine:addEntity(systems.cursor)
 
+    systems.bg = {
+      item = Background(),
+      camera =  Camera(1000,1000)
+    }
+
     Timer.every(1, function() systems.world:tick(1) end)
     
 end
 
 function game.draw()
+
+--    systems.bg.camera:attach()
+    systems.bg.item:draw()
+--    systems.bg.camera:detach()
 
     systems.camera:attach()
     systems.engine:draw()
@@ -140,6 +150,7 @@ function game.update(dt)
   systems.world:update(dt)
   systems.engine:update(dt)
   local pos = systems.player:get("Position")
-  systems.camera:move((pos.at.x- systems.camera.x)/2, (pos.at.y- systems.camera.y)/2)
+--  systems.bg.camera:move((pos.at.x - systems.camera.x)/3, (pos.at.y - systems.camera.y)/3)
+  systems.camera:lookAt(pos.at.x, pos.at.y)
 
 end
