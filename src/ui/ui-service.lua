@@ -3,7 +3,13 @@ Ui = class("Ui", Entity)
 function Ui:initialize()
   Entity.initialize(self)
 
+  self.font = love.graphics.newFont('res/AmaticSC-Regular.ttf', 52)
+  self.bold = love.graphics.newFont('res/Amatic-Bold.ttf', 52)
+  love.graphics.setFont(self.font)
   self.panels = {}
+  
+  suit.theme.color.hovered.bg = {227, 144, 95}
+  suit.theme.color.active.bg = {243, 235, 131}
   
 end
 
@@ -22,6 +28,11 @@ function Ui:draw()
   suit.layout:reset(20, 200)
   suit.layout:padding(10,10)
   _.invoke(self.panels, 'draw', systems.camera)
+  
+  love.graphics.setColor(255,255,255,150)
+
+  love.graphics.print(string.format('%.2f', systems.score.seconds), love.graphics.getWidth() - 400, 10)
+  love.graphics.print(string.format('%.2f', systems.sun.distance), love.graphics.getWidth() - 300, 10)
 end
 
 

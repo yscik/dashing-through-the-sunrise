@@ -8,3 +8,7 @@ end
 function Score:update(dt)
   self.seconds = self.seconds + dt
 end
+
+function Score:reset()
+  self.seconds = 0
+end

@@ -12,22 +12,37 @@ function Sun:initialize(options)
   self.path = data.paths
   self.t = 0.5
   self.r = 1
-  self:add(Position({at = {x = -1500 -options.scale*3, y = options.scale / 2}, z = 5, absolute = true}))
+  self.radius = 1500 + options.scale + 20 * 20
+  
+  self:add(Position({z = 5, absolute = true}))
   self:add(Render())
-  self.v = Velocity(40, 0)
+  self.v = Velocity(0, 0)
   self:add(self.v)
 
-  Timer.during(10, function(dt)
+  self.distance = 0
+
+end
+
+function Sun:start()
+  
+  Timer.during(15, function(dt)
     self:addV(10, dt)
   end)
 
+end
+
+function Sun:reset()
+  self.t = 0.5
+  local pos = self:get('Position')
+  pos.at.x, pos.at.y = -self.options.scale*1.6, self.options.scale / 2
+  self.v.x, self.v.y, self.v.r = 40, 0, 0
 end
 
 function Sun:draw ()
 
   love.graphics.push()
   love.graphics.setBlendMode('add', 'premultiplied')
-  love.graphics.translate(self.status.percent, 0)
+  love.graphics.translate(-self.radius, 0)
   love.graphics.scale(self.r, self.r)
   _.each(self.path, function(k, path)
     love.graphics.setColor(unpack(path.color))
@@ -45,19 +60,22 @@ function Sun:draw ()
 end
 
 function Sun:update(dt)
+  self:animate(dt)
+end
+
+function Sun:animate(dt)
   self.t = self.t + dt
 --  self.r = self.r + 0.01 * dt
   _.each(self.path, function(k, path)
-    path.r = path.r + (3*love.math.noise(k * self.t * 0.1) - 1.5) * dt * 0.04
---    path.d = path.d + (love.math.random() - 0.5 - path.d) * 1 * dt
+    path.r = path.r + (3*love.math.noise(k * self.t * 0.1) - 1.5) * dt * 0.08
+--    path.d = path.d + (love.math.noise(k * self.t * 0.001) - 0.5) * 10 * dt
   end)
 
-  self.status.percent = self.status.percent + dt
-  self:addV(1, dt)
+
 end
 
 function Sun:addV(amount, dt)
-  self.v.x = self.v.x + amount * dt
+--  self.v.x = self.v.x + amount * dt
 end
 
 

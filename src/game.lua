@@ -50,8 +50,10 @@ require 'src/world/asteroid-builder'
 require 'src/world/background'
 require 'src/world/sun'
 
-require 'src/game/capture'
+require 'src/game/state'
+require 'src/game/menu'
 require 'src/game/score'
+require 'src/game/director'
 
 require 'src/build/buildcommand'
 require 'src/build/building-entity'
@@ -64,10 +66,18 @@ game = {}
 
 function game.load(arg)
     
-    if arg[#arg] == "-debug" then require("mobdebug").start() end
+    io.output():setvbuf("no")
+    if arg[#arg] == "-debug" then
+      DEBUG = require("mobdebug")
+      DEBUG.start()
+      DEBUG.off()
+    
+    else
+      DEBUG = { on = function() end, off = function() end }
+    end
 
     systems = {}
-
+    systems.state = GameState()
 
     game.systems = systems
 
@@ -86,34 +96,34 @@ function game.load(arg)
     systems.camera = Camera(0,0)
     systems.ui = Ui(systems.camera, systems.input)
     systems.camera.smoother = Camera.smooth.linear(1)
---    local target = TargetDisplay(systems.player.burn.target)
+
     systems.cursor = CursorEntity(systems.input.input)
 
     systems.world = World(systems.engine)
     systems.score = Score()
     systems.world:add(systems.score)
+    systems.world:add(Director())
 
-    systems.world:add(LocalCluster())
+--    local a = Asteroid({x = 400, y = 0}, {size = 10})
+--    systems.world:add(a)
+--    Timer.after(1, function() a:explode() end)
+
     local h = love.graphics.getHeight()/2
     systems.sun = Sun({scale = h})
     systems.world:add(systems.sun)
 
-    local x1, y1 = 0, 0
-
-    systems.player = Player({x=x1+30, y = y1+40})
-    systems.world.player = systems.player
-    systems.world:add(systems.player)
-
-
---    Player({x=x1+30, y = y1+40})
     systems.engine:addEntity(systems.cursor)
 
     systems.bg = {
       item = Background(),
       camera =  Camera(1000,1000)
     }
+    
+    systems.state:create()
+    systems.state:start()
 
-    Timer.every(1, function() systems.world:tick(1) end)
+--    DEBUG.on()
+    
     
 end
 
@@ -125,24 +135,23 @@ function game.draw()
 
     systems.camera:attach()
     systems.engine:draw()
---    debugWorldDraw(systems.physics.world,-5000, -5000,5000, 5000)
+--    debugWorldDraw(systems.physics.world,-5000, -5000, 7000, 7000)
     systems.camera:detach()
 
     systems.ui:draw()
     suit.draw()
 
-    love.graphics.setColor(255,255,255)
-    love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+--  systems.bg.camera:attach()
+--  systems.sun:draw()
+--  systems.bg.camera:detach()
+
+    love.graphics.setColor(255,255,255, 255)
+    love.graphics.print('Build 2016-11-12', 10, 10)
+    love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), love.graphics.getWidth() - 150, 10)
 
 end
 
 function game.update(dt)
-
-  Timer.update(dt)
-  systems.world:update(dt)
-  systems.engine:update(dt)
-  local pos = systems.player:get("Position")
---  systems.bg.camera:move((pos.at.x - systems.camera.x)/3, (pos.at.y - systems.camera.y)/3)
-  systems.camera:lookAt(pos.at.x, pos.at.y)
+  systems.state:update(dt)
 
 end
