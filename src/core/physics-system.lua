@@ -7,6 +7,7 @@ function Body:initialize(o)
   _.extend(self, o)
 
   self.body = love.physics.newBody(systems.physics.world, o.at.x, o.at.y, 'dynamic')
+  if o.at.r then self.body:setAngle(o.at.r) end
   self.body:setUserData({component = self})
   self.fixtures = {}
   if o.shape then _.each(o.shape, function(k, path)
@@ -22,7 +23,11 @@ function Body:initialize(o)
 --  self.body:setMassData(0,0,o.mass)
 --  self.body:setAngularDamping(.5)
 
+end
 
+function Body:destroy()
+  self.body:destroy()
+  self.body = nil
 end
 
 function PhysicsSystem:initialize()
@@ -59,16 +64,19 @@ end
 
 function PhysicsSystem:update(dt)
 
-  local players = {systems.player:get('Body') }
+  local player = systems.player:get('Body')
 
   self.world:update(dt)
   local bodies = {}
   for k, entity in pairs(self.targets) do
     local body, pos = entity:get('Body'), entity:get('Position')
-    _.each(players, function(k,p) self:gravity(p, body) end)
---    bodies[#bodies] = body
-    pos.at.x, pos.at.y = body.body:getPosition()
-    pos.at.r = body.body:getAngle()
+    if body.body then
+--      self:gravity(player, body)
+  --    bodies[#bodies] = body
+  
+      pos.at.x, pos.at.y = body.body:getPosition()
+      pos.at.r = body.body:getAngle()
+    end
   end
 
 end
