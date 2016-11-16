@@ -3,9 +3,14 @@ Harpoon = class("Harpoon", Entity)
 
 local function ppos(player, dx, dy)
   local p = player:get('Position')
-  local px, py = vector.add(p.at.x, p.at.y, vector.rotate(p.at.r, dx or 10, dy or 10))
+  local px, py = vector.add(p.at.x, p.at.y, vector.rotate(p.at.r, dx or 0, dy or 0))
 
   return px,py
+end
+
+local function getTargetXY(target)
+  if target.body then return target.body:getWorldPoint(target.x ,target.y)
+  else return target.x, target.y end
 end
 
 function Harpoon:initialize(player, input)
@@ -19,10 +24,10 @@ function Harpoon:initialize(player, input)
   local x,y = vector.add(px, py, vector.mul(1000, vector.normalize(input.x - px, input.y - py)))
 
   local hit = self:findTarget(x, y)
-  local target = hit.body and {x = hit.x, y = hit.y} or {x = x, y = y }
+  local target = hit.body and hit or {x = x, y = y }
 
   local speed = 1500 -- px/sec
-  local distance = vector.dist(px, py, target.x, target.y)
+  local distance = vector.dist(px, py, getTargetXY(target))
   local time = distance / speed
   self.growing.rate = 1 / time
 
@@ -42,7 +47,7 @@ end
 
 function Harpoon:findTarget(x, y)
   local pbody = self.player:get('Body').body
-  local px, py = ppos(self.player, 30, -20)
+  local px, py = ppos(self.player)
 
   local hit = {fraction = 2};
 
@@ -50,7 +55,8 @@ function Harpoon:findTarget(x, y)
     local body = fixture:getBody()
     if body ~= pbody  and hit.fraction > fraction then
       hit.body = body
-      hit.x, hit.y, hit.fraction = x, y, fraction
+      hit.fraction = fraction
+      hit.x, hit.y = body:getLocalPoint(x, y)
     end
 
     return -1
@@ -62,24 +68,39 @@ end
 
 function Harpoon:connect(hit)
 
+  
   local px, py = ppos(self.player)
   local pbody = self.player:get('Body').body
-  self.joint = love.physics.newDistanceJoint(pbody, hit.body, px, py, hit.x, hit.y, true)
+  if hit.body:isDestroyed() then self:destroy() return end
+  local bx, by = hit.body:getWorldPoint(hit.x, hit.y)
+  self.joint = love.physics.newDistanceJoint(pbody, hit.body, px, py, bx, by, true)
   self.distance = self.joint:getLength()
-  self.joint:setFrequency(10000)
-  self.joint:setDampingRatio(.9)
+  self.joint:setFrequency(100)
+  self.joint:setDampingRatio(.1)
+  local vx, vy = pbody:getLinearVelocity()
+  
+  
+  self.jspeed = vector.rotate((math.atan2(bx, by)-math.pi/2), vx, vy)
+  print('v '..vx..',' .. vy ..' = ' .. self.jspeed)
+  
+--  self.player:push(vector.mul(1000, vector.normalize(bx-px, by-py)))
 
 end
 
 function Harpoon:update(dt)
   if self.joint then
+    if self.joint:isDestroyed() then self:destroy() return end
     local l = self.joint:getLength()
-    if l < 50 then self:destroy()
-    else self.joint:setLength(self.joint:getLength() - self.distance^0.5 * 10 * dt)
+    if l < self.distance * 0.7 then self:destroy() return
+    else self.joint:setLength(l - (l / self.distance)^2 * self.distance^0.5 * 20 * dt - self.jspeed/3 * dt)
 
 --    self:get('Position')
     end
-    if l < self.distance * 0.9 and #self.player:get('Body').body:getContactList() > 0 then self:destroy() end
+    if l < self.distance * 0.9 and #self.player:get('Body').body:getContactList() > 0 then self:destroy() return
+    end
+  
+    local n,m
+    n,m, self.target.x, self.target.y = self.joint:getAnchors()
 
   end
 end
@@ -87,32 +108,28 @@ end
 function Harpoon:destroy()
   self.destroyed = true
   if self.joint then
-    self.joint:destroy()
+    if not self.joint:isDestroyed() then self.joint:destroy() end
     self.joint = nil
   end
   systems.world:remove(self)
 end
 
+
 function Harpoon:grow(dt, target)
-  if self.destroyed then return end
+  if self.destroyed or target.body and target.body:isDestroyed() then return end
   local px, py = ppos(self.player)
-  self.target.x, self.target.y = px + self.growing.size * (target.x - px), py + self.growing.size * (target.y - py)
+  local x, y = getTargetXY(target)
+  self.target.x, self.target.y = px + self.growing.size * (x - px), py + self.growing.size * (y - py)
   self.growing.size = self.growing.size + self.growing.rate * dt
 end
 
 function Harpoon:draw()
 
-  love.graphics.setColor(rgba('#4F4444'))
+  love.graphics.setColor(rgba('#2B7196'))
   love.graphics.setLineWidth(2)
 
-  if self.joint then
-    local px, py = ppos(self.player, 10, -10)
-    local target = {self.joint:getAnchors()}
-    love.graphics.line(px, py, target[3], target[4])
-  else
-    local px, py = ppos(self.player, 10, -10)
-    love.graphics.line(px,py, self.target.x, self.target.y)
-  end
+  local px, py = ppos(self.player, 0, -5)
+  love.graphics.line(px,py, getTargetXY(self.target))
 
 
 end

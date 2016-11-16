@@ -9,10 +9,10 @@ function Player:initialize(pos)
   self.asteroids = {}
 
   self:add(Position({at = pos, center = {20,20}, z = 4}))
-  local body = Body({shape = {{-5,10, 5,10, 5,-20, -5,-20}}, mass = 200, at = pos, friction = .4, restitution = 0.1})
+  local body = Body({shape = {{-5,10, 5,10, 5,-20, -5,-20}}, mass = 200, at = pos, friction = .7, restitution = 0.1})
   body.body:setBullet(true)
-  body.body:setAngularDamping(1)
-  body.body:setLinearDamping(.5)
+  body.body:setAngularDamping(.6)
+  body.body:setLinearDamping(.1)
 
   local head = love.physics.newFixture(body.body, love.physics.newCircleShape(0, -15, 8), 70)
   head:setUserData({contact = function(body, contact) self:headhit(body, contact) end})
@@ -23,6 +23,7 @@ function Player:initialize(pos)
   body.body:setMassData(0,5, 100, 160000)
   self:add(body)
   self:add(Render())
+  self:add(Velocity())
 
   self:character()
 end
@@ -101,21 +102,23 @@ function Player:draw()
   love.graphics.rectangle("fill", -19, -20, 50, 40)
   love.graphics.pop()
 
-
-  --gun
-  love.graphics.push()
-  love.graphics.translate(15,25)
-
-  love.graphics.rotate(self.avatar.gun)
-  love.graphics.setColor(unpack(self.color))
-  love.graphics.rectangle("fill", -40, -13, 100, 25)
-  love.graphics.pop()
+--
+--  --gun
+--  love.graphics.push()
+--  love.graphics.translate(15,25)
+--
+--  love.graphics.rotate(self.avatar.gun)
+--  love.graphics.setColor(unpack(self.color))
+--  love.graphics.rectangle("fill", -40, -13, 100, 25)
+--  love.graphics.pop()
 
   --arm
   love.graphics.push()
   love.graphics.translate(10,40)
-  love.graphics.rotate(-0.8)
+  --  love.graphics.rotate(-0.8)
   love.graphics.rotate(self.avatar.gun)
+--  love.graphics.setColor(unpack(self.color))
+--  love.graphics.rectangle("fill", 10, -15, 20, 20)
   love.graphics.setColor(rgba('#999999'))
   love.graphics.rectangle("fill", -10, -10, 50, 20)
   love.graphics.pop()
@@ -185,6 +188,10 @@ end
 
 function Player:fire(target)
   Rocket(self, target)
+end
+
+function Player:push(...)
+  self:get('Body').body:applyForce(...)
 end
 
 function Player:move(d)
