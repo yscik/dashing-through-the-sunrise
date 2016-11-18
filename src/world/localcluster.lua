@@ -86,12 +86,14 @@ function LocalCluster:add(x, y, data)
     
     local a = Asteroid(adata.pos, adata.options)
     
-    systems.world:add(a)
-    asteroids[#asteroids+1] = a
+    if not a.failed then
+      systems.world:add(a)
+      asteroids[#asteroids+1] = a
     
     --      print('Added [' .. size ..'] '.. p.x .. ', ' .. p.y .. ' at ' .. x ..'x'.. y)
     
-    a:force(-love.math.randomNormal(10, adata.options.size * 20), love.math.randomNormal(adata.options.size * 20, 0), love.math.randomNormal(adata.options.size * 0.3, 0))
+      a:force(-love.math.randomNormal(10, adata.options.size * 20), love.math.randomNormal(adata.options.size * 20, 0), love.math.randomNormal(adata.options.size * 0.3, 0))
+    end
   end
   
   self.sectors[sk(x,y)] = asteroids

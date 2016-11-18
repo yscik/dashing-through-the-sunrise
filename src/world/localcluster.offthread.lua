@@ -39,9 +39,9 @@ function generateCluster(x,y, sectorsize)
       a[#a+1] = {pos = p, size = asize }
       
       local a
-      --pcall(function()
+      pcall(function()
         a = BuildAsteroid({size = asize})
-      --end)
+      end)
       
       
       if a then

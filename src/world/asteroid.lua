@@ -11,7 +11,10 @@ function Asteroid:initialize(pos, options)
   self.path = self.data.paths
 
   self.bodyopts = {entity = self, shape = _.pluck(self.data.paths, 'path'), at = pos, mass = 2000 / options.size^0.5, friction = 0.7, restitution = 0.1}
-  self:add(Body(self.bodyopts))
+  if not pcall(function() self:add(Body(self.bodyopts)) end) then
+    self.failed = true
+  end
+  
   
   self:add(Position({at = pos, z = 1}))
   self:add(Render())
