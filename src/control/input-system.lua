@@ -16,6 +16,8 @@ end
 function InputSystem:click(x, y, button)
  if not systems.state.running then return end
   
+ self:setInputState()
+  
  if button == 1 then
     systems.player:hook(self.input.pos)
   end
