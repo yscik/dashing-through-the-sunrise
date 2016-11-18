@@ -75,7 +75,7 @@ function Sun:animate(dt)
 end
 
 function Sun:addV(amount, dt)
---  self.v.x = self.v.x + amount * dt
+  self.v.x = self.v.x + amount * dt
 end
 
 

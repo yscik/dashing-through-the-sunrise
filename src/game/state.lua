@@ -102,6 +102,7 @@ function GameState:update(dt)
     self:updateGame(dt)
   else
     self.menu:update()
+    systems.cluster:update(dt)
     systems.input:update(dt)
     systems.sun:animate(dt)
     MovementSystem.move(systems.player, dt)

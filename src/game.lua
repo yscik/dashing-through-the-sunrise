@@ -120,7 +120,7 @@ function game.load(arg)
     }
     
     systems.state:create()
-    systems.state:start()
+--    systems.state:start()
 
     DEBUG.on()
     
