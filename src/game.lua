@@ -122,7 +122,7 @@ function game.load(arg)
     systems.state:create()
     systems.state:start()
 
---    DEBUG.on()
+    DEBUG.on()
     
     
 end
@@ -154,4 +154,9 @@ end
 function game.update(dt)
   systems.state:update(dt)
 
+end
+
+
+function love.threaderror(thread, errorstr)
+  print("Thread error!\n"..errorstr)
 end

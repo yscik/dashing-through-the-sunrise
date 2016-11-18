@@ -16,3 +16,6 @@
 [submodule "lib/dealunay"]
 	path = lib/delaunay
 	url = https://github.com/Yonaba/delaunay
+[submodule "lib/binser"]
+	path = lib/binser
+	url = https://github.com/bakpakin/binser.git

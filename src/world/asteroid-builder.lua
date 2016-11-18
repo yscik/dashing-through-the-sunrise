@@ -61,11 +61,11 @@ local function grid(poly, cell_size, variance)
 
 end
 
-function Asteroid:generate(o)
+function BuildAsteroid(o)
   local scale = o.size or love.math.random(3,15)
   local seed = o.seed or love.math.random()
   local center = v2(0,0)
-  self.seed = seed
+  
   local outline = circle(center, scale, seed)
 
 
@@ -86,12 +86,13 @@ function Asteroid:generate(o)
 
   local n = function(x,y)
     local scale = 600
-    return love.math.noise(self.seed + (x/scale), self.seed + (y/scale))
+    return love.math.noise(seed + (x/scale), seed + (y/scale))
   end
 
   local color = love.math.random(-5, 20)
   local sat_base = love.math.random(0, 20)
   return {
+   seed = seed,
    outline = love.math.triangulate(outline_points),
    paths = _.map(tris, function(k, tri)
     local cx,cy = tri:getCenter()
