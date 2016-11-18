@@ -12,7 +12,7 @@ function Player:initialize(pos)
   local body = Body({shape = {{-5,10, 5,10, 5,-20, -5,-20}}, mass = 200, at = pos, friction = .7, restitution = 0.1})
   body.body:setBullet(true)
   body.body:setAngularDamping(.6)
-  body.body:setLinearDamping(.1)
+  body.body:setLinearDamping(.3)
 
   local head = love.physics.newFixture(body.body, love.physics.newCircleShape(0, -15, 8), 70)
   head:setUserData({contact = function(body, contact) self:headhit(body, contact) end})
