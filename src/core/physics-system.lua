@@ -71,6 +71,7 @@ function PhysicsSystem:update(dt)
   for k, entity in pairs(self.targets) do
     local body, pos = entity:get('Body'), entity:get('Position')
     if body.body then
+      body.body:setAwake(pos.visible)
 --      self:gravity(player, body)
   --    bodies[#bodies] = body
   
