@@ -17,7 +17,7 @@ function Asteroid:initialize(pos, options)
   
   
   self:add(Position({at = pos, z = 1}))
-  self:add(Render())
+  self:add(Render({cache = not options.debris, size = {options.size*50, options.size*50}}))
   self.scale = 1
 
 end

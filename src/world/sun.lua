@@ -12,9 +12,9 @@ function Sun:initialize(options)
   self.path = data.paths
   self.t = 0.5
   self.r = 1
-  self.radius = 1500 + options.scale + 20 * 20
+  self.radius = options.scale
   
-  self:add(Position({z = 5, absolute = true}))
+  self:add(Position({z = 5}))
   self:add(Render())
   self.v = Velocity(0, 0)
   self:add(self.v)
@@ -42,14 +42,15 @@ function Sun:draw ()
 
   love.graphics.push()
   love.graphics.setBlendMode('add', 'premultiplied')
-  love.graphics.translate(-self.radius, 0)
-  love.graphics.scale(self.r, self.r)
+--  love.graphics.scale(0.25)
+  love.graphics.translate(-850, -self.radius*3)
   _.each(self.path, function(k, path)
     love.graphics.setColor(unpack(path.color))
     love.graphics.push()
-    love.graphics.rotate(path.r)
-    love.graphics.translate(path.d*40, 0)
+--    love.graphics.rotate(path.r)
+    love.graphics.translate(path.d * 20, path.r*self.radius)
     _.each(path.paths, function(k, tri)
+--        love.graphics.polygon("line", tri)
         love.graphics.polygon("fill", tri)
     end)
     love.graphics.pop()
@@ -67,8 +68,9 @@ function Sun:animate(dt)
   self.t = self.t + dt
 --  self.r = self.r + 0.01 * dt
   _.each(self.path, function(k, path)
-    path.r = path.r + (3*love.math.noise(k * self.t * 0.1) - 1.5) * dt * 0.08
---    path.d = path.d + (love.math.noise(k * self.t * 0.001) - 0.5) * 10 * dt
+--    print(math.round(love.math.noise(self.t)))
+    path.r = math.clamp(-1, path.r - (3*love.math.noise(k, self.t/10) - 1.5) * dt * 0.05, 1)
+    path.d = math.clamp(-1, path.r - (3*love.math.noise(k, self.t/20) - 1.5) * dt * 0.1, 1)
   end)
 
 
@@ -80,47 +82,60 @@ end
 
 
 local function circle(size, scale, seed)
+  
+  local w = scale * 15
+  print('path')
+  print(size)
+  local path = {0,0}
 
-  local path = {}
+  local count = size/100
+  
+  local v = v2(1,0)
 
-  local count = 5 + size^0.5 * 6
-  local baseAngle = math.pi*2 / count
-  local v = v2(0,1)
-
-  for i = 1, count, 1 do
-
-    v = v:rotated(baseAngle)
-    local p = v * (1500 + size + scale * 20 + scale^2*1 + love.math.noise(seed*100, v.x, v.y) * 10 + love.math.random(0, scale))
-
-    path[#path+1],path[#path+2] = p.x, p.y
-
+  for i = 0, count, 1 do
+    local d = math.abs(i - count/2) / (count/2)
+    
+    local px, py = math.max(1, w + math.cos(math.asin(d)) * 500 - love.math.noise(10/scale, i/10) * 50 - love.math.random(0, scale)), i * 100
+    --
+    print(px, py)
+    path[#path+1],path[#path+2] = px, py
   end
-
+  
+  path[#path+1],path[#path+2] = 0, size
+  
+  
   return path
 
 end
 
 function Sun:generate(o)
 
-  local size = o.scale
+  local size = o.scale * 6
   local seed = o.seed or love.math.random()
   self.seed = seed
 
   local paths = {}
 
-  local color = 15
+  local color = 6
   local sat_base = 255
 
   local function add(i)
     paths[#paths+1] = {
-      color = {HSL(math.random(color-15, color+20), sat_base - i *14, 90 - i * 4, 250 - i * 10)},
-      r = math.random(-1,1),
+      color = {HSL(math.random(color-15, color+20), sat_base - i *6, 105 - i * 4, 250 - i * 10)},
+      r = 0,
       d = love.math.noise(i/100),
       paths = love.math.triangulate(unpack(circle(size, i, seed)))
     }
   end
 
-  for i = 13, 1, -1 do add(i) end
+  for i = 30, 1, -1 do add(i) end
+  
+  paths[#paths+1] = {
+    color = {255, 255, 255, 255},
+    r = 0,
+    d = 0,
+    paths = {{50,0, 50, size, -size, size, -size, 0}}
+  }
 
   return {paths = paths }
 

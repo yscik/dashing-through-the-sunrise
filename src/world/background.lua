@@ -25,15 +25,24 @@ Background = class('Background')
 function Background:initialize()
 
   self.points = grid(3000, 3000, 100, 60)
-
+  
+  self.canvas = love.graphics.newCanvas(love.graphics.getDimensions())
+  
+  love.graphics.setCanvas(self.canvas)
+  love.graphics.clear(0, 0, 0, 255)
+  
+  _.each(self.points, function(k, point)
+    love.graphics.setColor(point.color,point.color,point.color,255)
+    love.graphics.circle('fill', point.x, point.y, 1)
+  end)
+  
+  love.graphics.setCanvas()
+  
 end
 
 
 function Background:draw()
 
-  _.each(self.points, function(k, point)
-    love.graphics.setColor(point.color,point.color,point.color,255)
-    love.graphics.circle('fill', point.x, point.y, 1)
-  end)
+  love.graphics.draw(self.canvas)
 
 end

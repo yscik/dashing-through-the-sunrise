@@ -2,6 +2,50 @@
 RenderSystem = class("RenderSystem", System)
 Render = Component.create("Render")
 
+function Render:initialize(options)
+  options = options or {}
+  _.extend(self, options)
+  
+--  if options.cache and not options.canvas then
+--    self:setCache(options.cache)
+--  end
+end
+
+function Render:setCache(enabled)
+  self.cache = enabled
+  if enabled then
+    
+  else
+  self.canvas = nil
+  end
+end
+
+function Render:render(fn, ...)
+  
+  local w, h = self.size and self.size[1], self.size[2] or love.graphics.getDimensions()
+  self.canvas = love.graphics.newCanvas(w, h, "normal", 8)
+  self.w, self.h = self.canvas:getDimensions()
+  
+  love.graphics.push()
+  love.graphics.reset()
+  
+  love.graphics.setCanvas(self.canvas)
+  love.graphics.translate(self.w/2, self.h/2)
+  fn(...)
+  love.graphics.setCanvas()
+  self.rendered = true
+  love.graphics.pop()
+  
+end
+
+function RenderSystem.drawCanvas(render)
+  love.graphics.setBlendMode("alpha", "premultiplied")
+  love.graphics.translate(-render.w/2, -render.h/2)
+  love.graphics.setColor(255,255,255,255)
+  love.graphics.draw(render.canvas)
+  love.graphics.setBlendMode("alpha")
+end
+
 function RenderSystem.atPosition(pos, fn, ...)
   love.graphics.push()
   love.graphics.translate(pos:getXY())
@@ -14,15 +58,23 @@ function RenderSystem.atPosition(pos, fn, ...)
 end
 
 function RenderSystem:render(entity)
-  local pos = entity:get("Position")
-
+  local pos, render = entity:get("Position"), entity:get('Render')
+  
+--  if self:visible(pos) ~= pos.visible then print(entity.id .. ': ' .. (v and 'visible' or 'hidden')) end
+  
   pos.visible = self:visible(pos)
 
   if pos.visible or pos.absolute then
     if entity.draw then
-      RenderSystem.atPosition(pos, entity.draw, entity)
+      if render.cache then
+        if not render.rendered then
+          render:render(entity.draw, entity)
+        end
+        RenderSystem.atPosition(pos, RenderSystem.drawCanvas, render)
+      else
+        RenderSystem.atPosition(pos, entity.draw, entity)
+      end
     end
-    self:outline(entity)
   end
 end
 
@@ -47,12 +99,18 @@ end
 function RenderSystem:initialize()
   System.initialize(self)
   self.items = {}
+  self.bb = {}
 end
 
 function RenderSystem:draw()
-
+  local margin = 300
   local w,h = love.graphics.getDimensions()
-  self.bb = {systems.camera.x - w, systems.camera.y - h, systems.camera.x + w, systems.camera.y + h }
+  self.bb.x1, self.bb.y1, self.bb.x2, self.bb.y2 =
+    systems.camera.x - w/2 - margin,
+    systems.camera.y - h/2- margin,
+    systems.camera.x + w/2 + margin,
+    systems.camera.y + h/2 + margin
+  
 
   for z, items in pairs(self.items) do
     for id, entity in pairs(items) do
@@ -63,7 +121,7 @@ function RenderSystem:draw()
 end
 
 function RenderSystem:visible(pos)
-  return pos.at.x > self.bb[1] and pos.at.y > self.bb[2] and pos.at.x < self.bb[3] and pos.at.y < self.bb[4]
+  return pos.at.x > self.bb.x1 and pos.at.y > self.bb.y1 and pos.at.x < self.bb.x2 and pos.at.y < self.bb.y2
 
 end
 
