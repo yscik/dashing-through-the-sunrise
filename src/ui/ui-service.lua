@@ -5,7 +5,6 @@ function Ui:initialize()
 
   self.font = love.graphics.newFont('res/AmaticSC-Regular.ttf', 52)
   self.bold = love.graphics.newFont('res/Amatic-Bold.ttf', 52)
-  love.graphics.setFont(self.font)
   self.panels = {}
   
   suit.theme.color.hovered.bg = {227, 144, 95}
@@ -25,14 +24,16 @@ function Ui:removePanel(panel)
 end
 
 function Ui:draw()
+  love.graphics.setFont(self.font)
   suit.layout:reset(20, 200)
   suit.layout:padding(10,10)
   _.invoke(self.panels, 'draw', systems.camera)
   
   love.graphics.setColor(255,255,255,150)
 
-  love.graphics.print(string.format('%.2f', systems.score.seconds), love.graphics.getWidth() - 400, 10)
-  love.graphics.print(string.format('%.2f', systems.sun.distance), love.graphics.getWidth() - 300, 10)
+  love.graphics.print(string.format('%.2f', systems.score.seconds), love.graphics.getWidth() - 300, 10)
+--  love.graphics.print(string.format('%.2f', systems.sun.distance), love.graphics.getWidth() - 300, 10)
+--  love.graphics.print((systems.sun:get('Position').visible and 'sun' or ''), love.graphics.getWidth() - 400, 10)
 end
 
 

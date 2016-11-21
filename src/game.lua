@@ -112,12 +112,8 @@ function game.load(arg)
     systems.sun = Sun({scale = h})
     systems.world:add(systems.sun)
 
-    systems.engine:addEntity(systems.cursor)
 
-    systems.bg = {
-      item = Background(),
-      camera =  Camera(1000,1000)
-    }
+    systems.bg = Background()
     
     systems.state:create()
 --    systems.state:start()
@@ -129,9 +125,7 @@ end
 
 function game.draw()
 
---    systems.bg.camera:attach()
-    systems.bg.item:draw()
---    systems.bg.camera:detach()
+    systems.bg:draw()
 
     systems.camera:attach()
     systems.engine:draw()

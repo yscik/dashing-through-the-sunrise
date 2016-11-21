@@ -10,7 +10,14 @@ function Asteroid:initialize(pos, options)
   self.data = options.data
   self.path = self.data.paths
 
-  self.bodyopts = {entity = self, shape = _.pluck(self.data.paths, 'path'), at = pos, mass = 2000 / options.size^0.5, friction = 0.7, restitution = 0.1}
+  self.bodyopts = {entity = self,
+    shape = _.pluck(self.data.paths, 'path'),
+    at = pos,
+    mass = 2000 / options.size^0.5,
+    friction = 0.7, restitution = 0.1,
+--    type = options.debris and 'kinematic' or 'dynamic'
+  }
+  
   if not pcall(function() self:add(Body(self.bodyopts)) end) then
     self.failed = true
   end

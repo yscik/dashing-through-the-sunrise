@@ -6,7 +6,7 @@ Body = Component.create("Body")
 function Body:initialize(o)
   _.extend(self, o)
 
-  self.body = love.physics.newBody(systems.physics.world, o.at.x, o.at.y, 'dynamic')
+  self.body = love.physics.newBody(systems.physics.world, o.at.x, o.at.y, o.type or 'dynamic')
   if o.at.r then self.body:setAngle(o.at.r) end
   self.body:setUserData({component = self})
   self.fixtures = {}
@@ -74,7 +74,7 @@ function PhysicsSystem:update(dt)
       body.body:setAwake(pos.visible)
 --      self:gravity(player, body)
   --    bodies[#bodies] = body
-  
+
       pos.at.x, pos.at.y = body.body:getPosition()
       pos.at.r = body.body:getAngle()
     end
