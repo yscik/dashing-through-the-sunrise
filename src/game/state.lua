@@ -92,7 +92,7 @@ function GameState:updateGame(dt)
   systems.engine:update(dt)
   
   local pos = systems.player:get("Position")
-  systems.camera:move((pos.at.x - systems.camera.x)*systems.camera.speed*dt, (pos.at.y - systems.camera.y)*systems.camera.speed*dt)
+  systems.camera:move((pos.at.x + 200 - systems.camera.x)*systems.camera.speed*dt, (pos.at.y - systems.camera.y)*systems.camera.speed*dt)
 end
 
 function GameState:update(dt)
