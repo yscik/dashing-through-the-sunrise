@@ -10,6 +10,7 @@ function Position:initialize(o)
 
   self.parent = o.parent
   self.flipped = false
+  self.visible = true
 end
 
 local dimensions = {"x", "y", "r"}
