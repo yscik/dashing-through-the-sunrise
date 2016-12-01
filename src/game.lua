@@ -47,11 +47,13 @@ require 'src/world/world'
 require 'src/world/localcluster'
 require 'src/world/asteroid'
 require 'src/world/asteroid-builder'
+require 'src/world/pool'
 require 'src/world/background'
 require 'src/world/sun'
 
 require 'src/game/state'
 require 'src/game/menu'
+require 'src/game/splash'
 require 'src/game/score'
 require 'src/game/director'
 
@@ -97,12 +99,18 @@ function game.load(arg)
     systems.ui = Ui(systems.camera, systems.input)
     systems.camera.smoother = Camera.smooth.linear(1)
 
-    systems.cursor = CursorEntity(systems.input.input)
+    if(systems.input.showCursor) then
+      systems.cursor = CursorEntity(systems.input.input)
+      systems.engine:addEntity(systems.cursor)
+    end
 
     systems.world = World(systems.engine)
     systems.score = Score()
     systems.world:add(systems.score)
     systems.world:add(Director())
+    
+    systems.pool = Pool()
+
 
 --    local a = Asteroid({x = 400, y = 0}, {size = 10})
 --    systems.world:add(a)
@@ -115,7 +123,8 @@ function game.load(arg)
 
     systems.bg = Background()
     
-    systems.state:create()
+    systems.state:load()
+--    systems.state:create()
 --    systems.state:start()
 
     DEBUG.on()
@@ -128,7 +137,10 @@ function game.draw()
     systems.bg:draw()
 
     systems.camera:attach()
+    love.graphics.push()
+--    love.graphics.scale(1.3)
     systems.engine:draw()
+    love.graphics.pop()
 --    debugWorldDraw(systems.physics.world,-5000, -5000, 7000, 7000)
     systems.camera:detach()
 
@@ -140,7 +152,7 @@ function game.draw()
 --  systems.bg.camera:detach()
 
     love.graphics.setColor(255,255,255, 255)
-    love.graphics.print('Build 2016-11-12', 10, 10)
+    love.graphics.print('Build 2016-11-18', 10, 10)
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), love.graphics.getWidth() - 150, 10)
 
 end

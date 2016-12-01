@@ -71,7 +71,7 @@ function BuildAsteroid(o)
 
   local outline_points = {getPoints(outline)}
   local poly = Polygon(unpack(outline_points))
-  local cellsize = 60
+  local cellsize = 50
 
 
   local points = grid(poly, cellsize, cellsize/3)
@@ -97,9 +97,9 @@ function BuildAsteroid(o)
    paths = _.map(tris, function(k, tri)
     local cx,cy = tri:getCenter()
     local n1 = n(cx,cy)
-    local n2 = n(14 + cx, 19 + cy)
+    local n2 = n(6 + cx, 5 + cy)
     return {
-      color = o.color or {HSL(color + n1 * 12, sat_base + 25*n1 + color*0.5, 60 + 50 * n2, 255)},
+      color = o.color or {HSL(color + n1 * 18, sat_base + 30*n1 + color*0.5, 50 + 80 * n2, 255)},
       path = {tri.p1.x, tri.p1.y, tri.p2.x, tri.p2.y, tri.p3.x, tri.p3.y}}
   end)}
 

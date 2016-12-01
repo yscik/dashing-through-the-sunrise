@@ -3,8 +3,29 @@ GameState = class('GameState')
 
 function GameState:initialize()
   self.menu = Menu()
+  self.splash = Splash()
   self.showmenu = true
   self.timer = Timer()
+end
+
+function GameState:load()
+  
+  self.generating = true
+  self.loading = true
+  local seed = love.math.random(10000,2^50)
+  love.math.setRandomSeed(seed)
+  systems.sun:reset()
+  systems.pool:asteroids()
+  systems.pool.done = function()
+    self:create()
+    self.loading = false
+    systems.pool:asteroids()
+    systems.pool.done = function()
+      self.generating = false
+    end
+   end
+  systems.camera:lookAt(-400, 0)
+  systems.camera.speed = 1
 end
 
 function GameState:create()
@@ -13,7 +34,7 @@ function GameState:create()
   
   local seed = love.math.random(10000,2^50)
   love.math.setRandomSeed(seed)
-  
+
   systems.cluster = LocalCluster()
   systems.world:add(systems.cluster)
   systems.sun:reset()
@@ -25,7 +46,7 @@ function GameState:create()
   
   local pos = systems.player:get("Position")
   systems.camera:lookAt(pos.at.x - 500, pos.at.y)
-  systems.camera.speed = 1
+  
   local v = systems.player:get('Velocity')
   v.x, v.y, v.r = 3, 4, -0.1
   
@@ -87,26 +108,41 @@ function GameState:cleanup()
 
 end
 
+local function moveCamera(dt, x, y)
+  systems.camera:move((x - systems.camera.x)*systems.camera.speed*dt, (y - systems.camera.y)*systems.camera.speed*dt)
+end
+
 function GameState:updateGame(dt)
   systems.world:update(dt)
   systems.engine:update(dt)
   
   local pos = systems.player:get("Position")
-  systems.camera:move((pos.at.x + 200 - systems.camera.x)*systems.camera.speed*dt, (pos.at.y - systems.camera.y)*systems.camera.speed*dt)
+  moveCamera(dt, pos.at.x + 200, pos.at.y)
 end
 
 function GameState:update(dt)
   self.timer:update(dt)
-  if self.running then
+  if self.generating then
+    systems.pool:update(dt)
+  end
+  if self.loading then
+--    systems.input:update(dt)
+    self.splash:update()
+    systems.sun:animate(dt)
+    
+  else if self.running then
     Timer.update(dt)
     self:updateGame(dt)
+    
   else
     self.menu:update()
-    systems.cluster:update(dt)
+--    systems.cluster:update(dt)
+  
+    
     systems.input:update(dt)
     systems.sun:animate(dt)
     MovementSystem.move(systems.player, dt)
   end
-
+  end
 end
 

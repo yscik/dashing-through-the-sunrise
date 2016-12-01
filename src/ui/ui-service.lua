@@ -3,8 +3,11 @@ Ui = class("Ui", Entity)
 function Ui:initialize()
   Entity.initialize(self)
 
-  self.font = love.graphics.newFont('res/AmaticSC-Regular.ttf', 52)
-  self.bold = love.graphics.newFont('res/Amatic-Bold.ttf', 52)
+  self.fonts = {
+    base = love.graphics.newFont('res/AmaticSC-Regular.ttf', 52),
+    bold = love.graphics.newFont('res/Amatic-Bold.ttf', 52),
+    title = love.graphics.newFont('res/AmaticSC-Regular.ttf', 132)
+  }
   self.panels = {}
   
   suit.theme.color.hovered.bg = {227, 144, 95}
@@ -24,7 +27,7 @@ function Ui:removePanel(panel)
 end
 
 function Ui:draw()
-  love.graphics.setFont(self.font)
+  love.graphics.setFont(self.fonts.base)
   suit.layout:reset(20, 200)
   suit.layout:padding(10,10)
   _.invoke(self.panels, 'draw', systems.camera)

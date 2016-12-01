@@ -30,5 +30,10 @@ function Menu:update(dt)
   if suit.Button('Quit', suit.layout:row(self.width, self.height)).hit then
     love.event.quit()
   end
+  
+  if systems.state.generating then
+    local progress = systems.pool.count.done / systems.pool.count.total;
+    suit.Label(string.format('(even more rocks)\n%.0f%%', progress*100), suit.layout:row(self.width, self.height))
+  end
 end
 

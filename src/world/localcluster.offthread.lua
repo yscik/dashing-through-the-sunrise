@@ -9,9 +9,7 @@ require('src/world/asteroid-builder')
 require 'src/utils/color'
 require 'src/utils/math'
 
-local size_mult = 30
-
-local channel = love.thread.getChannel('cluster')
+local size_mult = 34
 
 function generateCluster(x,y, sectorsize)
   
@@ -53,7 +51,6 @@ function generateCluster(x,y, sectorsize)
   end
   --  print('Adding sector ' .. x ..'x' .. y .. ', ' .. #asteroids .. ' asteroids, size at ' .. size)
   
-  print(#asteroids)
   return asteroids
   
 end
