@@ -152,7 +152,7 @@ function game.draw()
 --  systems.bg.camera:detach()
 
     love.graphics.setColor(255,255,255, 255)
-    love.graphics.print('Build 2016-11-18', 10, 10)
+    love.graphics.print('Build 2016-12-02', 10, 10)
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), love.graphics.getWidth() - 150, 10)
 
 end
